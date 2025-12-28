@@ -13,52 +13,98 @@ class PWAInstaller {
 
     init() {
         console.log('%c📱 PWA Installer initializing...', 'color: #FFCC00; font-weight: bold');
+        
+        // Log device info
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        const isHTTPS = location.protocol === 'https:' || location.hostname === 'localhost';
+        console.log('Device Info:', { isMobile, isHTTPS, userAgent: navigator.userAgent });
 
         // Check if app is already installed
         this.checkIfInstalled();
 
         if (!this.isInstalled) {
-            // Listen for the beforeinstallprompt event (most important event)
-            window.addEventListener('beforeinstallprompt', (e) => {
-                e.preventDefault();
-                this.deferredPrompt = e;
-                console.log('%c✅ beforeinstallprompt event captured!', 'color: #51cf66; font-weight: bold');
-                
-                this.showInstallButton();
-                this.showInstallBanner();
-                
-                // Auto-trigger after a short delay
-                setTimeout(() => {
-                    this.autoTriggerInstall();
-                }, 1000);
-            });
-
-            // Fallback timeout - if beforeinstallprompt doesn't fire in 3 seconds
-            setTimeout(() => {
-                if (!this.deferredPrompt && !this.isInstalled) {
-                    console.log('ℹ️  beforeinstallprompt event not captured (normal in some contexts)');
+            // Wait for service worker to be ready before listening for install prompt
+            const setupInstallPrompt = () => {
+                // Listen for the beforeinstallprompt event (most important event)
+                window.addEventListener('beforeinstallprompt', (e) => {
+                    e.preventDefault();
+                    this.deferredPrompt = e;
+                    console.log('%c✅ beforeinstallprompt event captured!', 'color: #51cf66; font-weight: bold');
+                    
                     this.showInstallButton();
                     this.showInstallBanner();
-                }
-            }, 3000);
+                    
+                    // Auto-trigger install prompt after short delay
+                    setTimeout(() => {
+                        this.autoTriggerInstall();
+                    }, 1500);
+                });
+
+                // Log when we're waiting for the event
+                console.log('⏳ Waiting for beforeinstallprompt event (service worker is ready)...');
+                
+                // Fallback timeout - if beforeinstallprompt doesn't fire in 8 seconds
+                setTimeout(() => {
+                    if (!this.deferredPrompt && !this.isInstalled) {
+                        console.log('%c⚠️  beforeinstallprompt event not captured after 8s', 'color: #ff9800; font-weight: bold');
+                        console.log('Possible reasons: Not HTTPS, User is on iOS, browser does not support beforeinstallprompt');
+                        this.showInstallButton();
+                        this.showInstallBanner();
+                    }
+                }, 8000);
+            };
+            
+            // Wait for service worker to be ready
+            if (window.serviceWorkerReady) {
+                console.log('Service worker already ready');
+                setupInstallPrompt();
+            } else {
+                window.addEventListener('serviceWorkerReady', setupInstallPrompt);
+                
+                // Fallback: if service worker doesn't fire ready event in 10 seconds, proceed anyway
+                setTimeout(() => {
+                    if (!window.serviceWorkerReady) {
+                        console.log('Service worker not ready, proceeding anyway...');
+                        setupInstallPrompt();
+                    }
+                }, 10000);
+            }
         }
 
-        // Listen for app installed event
-        window.addEventListener('appinstalled', () => {
-            console.log('%c✅ App installed successfully!', 'color: #51cf66; font-weight: bold');
-            this.isInstalled = true;
-            this.hideInstallButton();
-            localStorage.setItem('pwaInstalled', 'true');
-            this.deferredPrompt = null;
+         // Listen for app installed event
+         window.addEventListener('appinstalled', () => {
+             console.log('%c✅ App installed successfully!', 'color: #51cf66; font-weight: bold');
+             this.isInstalled = true;
+             localStorage.setItem('pwaInstalled', 'true');
+             this.deferredPrompt = null;
+             
+             // Hide install button immediately
+             const installBtn = document.getElementById('pwaInstallBtn');
+             if (installBtn) {
+                 installBtn.style.display = 'none';
+                 console.log('Install button hidden');
+             }
+             
+             // Hide install banner
+             const banner = document.getElementById('installBanner');
+             if (banner) {
+                 banner.style.display = 'none';
+                 console.log('Install banner hidden');
+             }
 
-            if (typeof Swal !== 'undefined') {
-                Swal.success('Installation Successful!', 'The Four SACCO is now installed on your device. You can use it offline anytime.');
-            }
-        });
+             if (typeof Swal !== 'undefined') {
+                 Swal.fire({
+                     icon: 'success',
+                     title: 'Installation Successful!',
+                     text: 'The Four SACCO is now installed on your device. You can use it offline anytime.',
+                     confirmButtonColor: '#FFCC00'
+                 });
+             }
+         });
 
-        // Setup button listeners
-        this.setupButtonListener();
-    }
+         // Setup button listeners
+         this.setupButtonListener();
+     }
 
     checkIfInstalled() {
         // Check localStorage flag
@@ -112,21 +158,44 @@ class PWAInstaller {
     }
 
     /**
-     * Auto-trigger installation after a delay
-     */
-    autoTriggerInstall() {
-        if (this.deferredPrompt && !this.isInstalled && !this.promptAttempted) {
-            console.log('Showing installation prompt');
-            
-            if (typeof Swal !== 'undefined') {
-                Swal.info('App Ready', 'The Four SACCO app is ready to be installed. You can use it offline.');
-            }
-
-            setTimeout(() => {
-                this.handleInstallClick();
-            }, 500);
-        }
-    }
+      * Auto-trigger installation after a delay
+      */
+     autoTriggerInstall() {
+         if (this.deferredPrompt && !this.isInstalled && !this.promptAttempted) {
+             console.log('🔔 Auto-triggering installation prompt');
+             this.promptAttempted = true;
+             
+             try {
+                 this.deferredPrompt.prompt();
+                 
+                 this.deferredPrompt.userChoice.then((choiceResult) => {
+                     if (choiceResult.outcome === 'accepted') {
+                         console.log('%c✅ User accepted installation', 'color: #51cf66; font-weight: bold');
+                         this.isInstalled = true;
+                         localStorage.setItem('pwaInstalled', 'true');
+                         
+                         // Hide install button and banner immediately
+                         const installBtn = document.getElementById('pwaInstallBtn');
+                         if (installBtn) {
+                             installBtn.style.display = 'none';
+                             console.log('Install button hidden after acceptance');
+                         }
+                         
+                         const banner = document.getElementById('installBanner');
+                         if (banner) {
+                             banner.style.display = 'none';
+                             console.log('Install banner hidden after acceptance');
+                         }
+                     } else {
+                         console.log('User dismissed installation prompt');
+                     }
+                     this.deferredPrompt = null;
+                 });
+             } catch (error) {
+                 console.error('Error in auto-trigger:', error);
+             }
+         }
+     }
 
     showInstallButton() {
         if (this.isInstalled) return;
@@ -149,29 +218,29 @@ class PWAInstaller {
     }
 
     showInstallBanner() {
-        const banner = document.getElementById('installBanner');
-        const dismissedBanner = localStorage.getItem('installBannerDismissed');
-        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+         const banner = document.getElementById('installBanner');
+         const dismissedBanner = localStorage.getItem('installBannerDismissed');
+         const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
-        if (banner && !dismissedBanner && !isMobile && !this.isInstalled) {
-            banner.style.display = 'block';
-            console.log('✅ Install banner displayed');
+         if (banner && !dismissedBanner && !this.isInstalled) {
+             banner.style.display = 'block';
+             console.log('✅ Install banner displayed', { isMobile });
 
-            const installBtn = document.getElementById('installBannerBtn');
-            const dismissBtn = document.getElementById('dismissBannerBtn');
+             const installBtn = document.getElementById('installBannerBtn');
+             const dismissBtn = document.getElementById('dismissBannerBtn');
 
-            if (installBtn) {
-                installBtn.addEventListener('click', () => this.handleInstallClick());
-            }
+             if (installBtn) {
+                 installBtn.addEventListener('click', () => this.handleInstallClick());
+             }
 
-            if (dismissBtn) {
-                dismissBtn.addEventListener('click', () => {
-                    banner.style.display = 'none';
-                    localStorage.setItem('installBannerDismissed', 'true');
-                });
-            }
-        }
-    }
+             if (dismissBtn) {
+                 dismissBtn.addEventListener('click', () => {
+                     banner.style.display = 'none';
+                     localStorage.setItem('installBannerDismissed', 'true');
+                 });
+             }
+         }
+     }
 
     hideInstallButton() {
         if (document.readyState === 'loading') {
@@ -191,50 +260,57 @@ class PWAInstaller {
     }
 
     async handleInstallClick() {
-        if (!this.deferredPrompt) {
-            console.warn('⚠️  Install prompt not available');
-            this.showAlternativeInstallInstructions();
-            return;
-        }
+         if (!this.deferredPrompt) {
+             console.warn('⚠️  Install prompt not available yet. Waiting...');
+             return;
+         }
 
-        try {
-            this.promptAttempted = true;
-            console.log('Triggering install prompt...');
+         try {
+             this.promptAttempted = true;
+             console.log('Triggering install prompt...');
 
-            // Show the install prompt
-            this.deferredPrompt.prompt();
+             // Show the install prompt
+             this.deferredPrompt.prompt();
 
-            // Wait for user choice
-            const { outcome } = await this.deferredPrompt.userChoice;
+             // Wait for user choice
+             const { outcome } = await this.deferredPrompt.userChoice;
 
-            if (outcome === 'accepted') {
-                console.log('%c✅ User accepted installation', 'color: #51cf66; font-weight: bold');
-                this.isInstalled = true;
-                localStorage.setItem('pwaInstalled', 'true');
-                this.hideInstallButton();
+             if (outcome === 'accepted') {
+                 console.log('%c✅ User accepted installation', 'color: #51cf66; font-weight: bold');
+                 this.isInstalled = true;
+                 localStorage.setItem('pwaInstalled', 'true');
+                 
+                 // Hide install button and banner immediately
+                 const installBtn = document.getElementById('pwaInstallBtn');
+                 if (installBtn) {
+                     installBtn.style.display = 'none';
+                     console.log('Install button hidden');
+                 }
+                 
+                 const banner = document.getElementById('installBanner');
+                 if (banner) {
+                     banner.style.display = 'none';
+                     console.log('Install banner hidden');
+                 }
 
-                if (typeof Swal !== 'undefined') {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Installation Complete!',
-                        html: '<p>The Four SACCO is now installed on your device.</p><p>You can use all features offline.</p>',
-                        confirmButtonColor: '#FFCC00',
-                        confirmButtonText: 'Start Using'
-                    });
-                }
-            } else {
-                console.log('User dismissed installation prompt');
-                if (typeof Swal !== 'undefined') {
-                    Swal.info('Installation Deferred', 'You can install the app anytime by clicking the Install button in the top right.');
-                }
-            }
+                 if (typeof Swal !== 'undefined') {
+                     Swal.fire({
+                         icon: 'success',
+                         title: 'Installation Complete!',
+                         html: '<p>The Four SACCO is now installed on your device.</p><p>You can use all features offline.</p>',
+                         confirmButtonColor: '#FFCC00',
+                         confirmButtonText: 'Start Using'
+                     });
+                 }
+             } else {
+                 console.log('User dismissed installation prompt');
+             }
 
-            this.deferredPrompt = null;
-        } catch (error) {
-            console.error('❌ Error handling install prompt:', error);
-            this.showAlternativeInstallInstructions();
-        }
-    }
+             this.deferredPrompt = null;
+         } catch (error) {
+             console.error('❌ Error handling install prompt:', error);
+         }
+     }
 
     showAlternativeInstallInstructions() {
         let title = '';

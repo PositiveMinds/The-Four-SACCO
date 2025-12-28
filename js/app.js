@@ -728,10 +728,29 @@ const App = {
                  return;
              }
 
-             // Check if loan amount exceeds total savings
-             const totalSavings = await Storage.getTotalSavingsByMemberId(memberId);
-             if (amount > totalSavings) {
-                 UI.showAlert(`Loan amount (UGX ${amount.toLocaleString()}) cannot exceed member's total savings (UGX ${totalSavings.toLocaleString()})`, 'warning');
+             // Check if loan amount exceeds total collective savings (all members)
+             const allSavings = await Storage.getSavings();
+             const totalCollectiveSavings = allSavings.reduce((sum, saving) => sum + (saving.amount || 0), 0);
+             
+             // Also deduct existing withdrawals
+             const allWithdrawals = await Storage.getWithdrawals();
+             const totalWithdrawals = allWithdrawals.reduce((sum, withdrawal) => sum + (withdrawal.amount || 0), 0);
+             
+             const availableSavingsPool = totalCollectiveSavings - totalWithdrawals;
+             
+             // Get all active loans to check total loaned out
+             const allLoans = await Storage.getLoans();
+             const totalCurrentlyLoaned = allLoans.reduce((sum, loan) => sum + loan.amount, 0);
+             
+             const maxAvailableToLend = availableSavingsPool - totalCurrentlyLoaned;
+             
+             if (amount > maxAvailableToLend) {
+                 UI.showAlert(
+                     `Cannot issue loan: Loan amount (UGX ${UI.formatNumber(amount)}) exceeds available lending pool (UGX ${UI.formatNumber(maxAvailableToLend)}).\n\n` +
+                     `Total Collective Savings: UGX ${UI.formatNumber(availableSavingsPool)}\n` +
+                     `Already Loaned Out: UGX ${UI.formatNumber(totalCurrentlyLoaned)}`,
+                     'warning'
+                 );
                  return;
              }
 

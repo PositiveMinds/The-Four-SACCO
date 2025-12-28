@@ -169,7 +169,20 @@
 
         <!-- Main Content -->
         <main class="flex-grow-1" style="background: linear-gradient(135deg, var(--light) 0%, #ffffff 100%);">
-            <div class="container-fluid" style="padding: 2rem 1rem;">
+            <div class="container-fluid" style="padding: 2rem 3rem; margin: 0 auto; max-width: 1600px;">
+                <!-- Responsive padding adjustments -->
+                <style>
+                    @media (max-width: 768px) {
+                        main .container-fluid {
+                            padding: 1.5rem 1rem !important;
+                        }
+                    }
+                    @media (max-width: 480px) {
+                        main .container-fluid {
+                            padding: 1rem 0.75rem !important;
+                        }
+                    }
+                </style>
                 <!-- Dashboard Page -->
                 <section id="dashboard" class="page active">
                     <div class="mb-4">
@@ -1220,6 +1233,7 @@
     <script src="js/export.js"></script>
     <script src="js/receipts.js"></script>
     <script src="js/sidebar-features.js"></script>
+    <script src="js/select2-init.js"></script>
     <script src="js/transactions.js"></script>
     <script src="js/ui.js"></script>
     <script src="js/notifications.js"></script>
@@ -1235,14 +1249,22 @@
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-          navigator.serviceWorker.register('./service-worker.js')
+          console.log('%c📦 Registering Service Worker...', 'color: #FFCC00; font-weight: bold');
+          navigator.serviceWorker.register('./service-worker.js', { scope: './' })
             .then(registration => {
-              console.log('Service Worker registered successfully:', registration);
+              console.log('%c✅ Service Worker registered successfully', 'color: #51cf66; font-weight: bold');
+              console.log('Scope:', registration.scope);
+              
+              // Mark that service worker is ready for PWA installation
+              window.serviceWorkerReady = true;
+              window.dispatchEvent(new Event('serviceWorkerReady'));
             })
             .catch(error => {
-              console.error('Service Worker registration failed:', error);
+              console.error('%c❌ Service Worker registration failed:', 'color: #ff6b6b; font-weight: bold', error);
             });
         });
+      } else {
+        console.warn('Service Worker not supported in this browser');
       }
       
       // Initialize Select2 after page loads

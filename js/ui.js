@@ -145,21 +145,27 @@ const UI = {
         this.renderRecentActivity();
 
         // Populate activity member filter dropdown
-        const filterSelect = document.getElementById('activityMemberFilter');
-        if (filterSelect) {
-            const uniqueMembers = [...new Set(this.allActivities.map(a => a.member))];
-            const currentValue = filterSelect.value;
-            filterSelect.innerHTML = '<option value="">All Members</option>' +
-                uniqueMembers.map(m => `<option value="${m}">${m}</option>`).join('');
-            filterSelect.value = currentValue;
-            
-            // Refresh virtual-select if available
-             if (typeof window.VirtualSelect !== 'undefined') {
+         const filterSelect = document.getElementById('activityMemberFilter');
+         if (filterSelect) {
+             const uniqueMembers = [...new Set(this.allActivities.map(a => a.member))];
+             const currentValue = filterSelect.value;
+             filterSelect.innerHTML = '<option value="">All Members</option>' +
+                 uniqueMembers.map(m => `<option value="${m}">${m}</option>`).join('');
+             filterSelect.value = currentValue;
+             
+             // Refresh Select2 if available
+             if (typeof jQuery !== 'undefined' && jQuery.fn.select2) {
                  setTimeout(() => {
-                     window.VirtualSelect.init({ el: '#activityMemberFilter' });
+                     jQuery(filterSelect).trigger('change.select2');
                  }, 0);
              }
-            }
+             // Refresh virtual-select if available
+              if (typeof window.VirtualSelect !== 'undefined') {
+                  setTimeout(() => {
+                      window.VirtualSelect.init({ el: '#activityMemberFilter' });
+                  }, 0);
+              }
+             }
             },
 
     renderRecentActivity() {
@@ -492,15 +498,22 @@ const UI = {
                     members.map(m => `<option value="${m.id}">${(m.name || '').trim()}</option>`).join('');
                 select.value = currentValue;
                 
+                // Refresh Select2 if available
+                if (typeof jQuery !== 'undefined' && jQuery.fn.select2) {
+                    setTimeout(() => {
+                        jQuery(select).trigger('change.select2');
+                    }, 0);
+                }
+                
                 // Refresh virtual-select if available
                 if (typeof window.VirtualSelect !== 'undefined') {
                     setTimeout(() => {
                         window.VirtualSelect.init({ el: '#' + selectId });
                     }, 0);
                 }
-                }
-                });
-                },
+            }
+        });
+    },
 
                 // Loans refresh
     allLoans: [],

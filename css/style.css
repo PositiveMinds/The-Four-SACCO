@@ -1488,11 +1488,11 @@ main {
 
 /* Page Sections */
 .page {
-    display: none;
+    display: none !important;
 }
 
 .page.active {
-    display: block;
+    display: block !important;
 }
 
 /* Footer */
@@ -2263,6 +2263,10 @@ nav {
     .d-flex {
         flex-direction: column;
         gap: 1rem !important;
+    }
+
+    .d-flex.justify-content-between {
+        justify-content: flex-start !important;
     }
 
     .d-flex.flex-wrap {

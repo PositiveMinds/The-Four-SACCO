@@ -72,25 +72,28 @@ class AdvancedCharts {
      * Apply mobile-responsive settings based on screen width
      */
     applyMobileResponsiveness() {
-        const width = window.innerWidth;
-        const isMobile = width < 768;
-        const isTablet = width < 1024;
+         const width = window.innerWidth;
+         const isMobile = width < 480;
+         const isSmallMobile = width < 640;
+         const isTablet = width < 1024;
 
-        // Adjust chart heights
-        const charts = ['savingsTrendChart', 'topMembersBarChart', 'financialWaterfallChart', 'comparisonChart', 'repaymentMetricsChart'];
-        charts.forEach(chartId => {
-            const container = document.getElementById(chartId);
-            if (container) {
-                if (isMobile) {
-                    container.style.height = '280px';
-                } else if (isTablet) {
-                    container.style.height = '350px';
-                } else {
-                    container.style.height = '400px';
-                }
-            }
-        });
-    }
+         // Adjust chart heights
+         const charts = ['savingsTrendChart', 'topMembersBarChart', 'financialWaterfallChart', 'comparisonChart', 'repaymentMetricsChart'];
+         charts.forEach(chartId => {
+             const container = document.getElementById(chartId);
+             if (container) {
+                 if (isMobile) {
+                     container.style.height = '240px';
+                 } else if (isSmallMobile) {
+                     container.style.height = '260px';
+                 } else if (isTablet) {
+                     container.style.height = '330px';
+                 } else {
+                     container.style.height = '400px';
+                 }
+             }
+         });
+     }
 
     attachDataChangeListeners() {
         // Listen for data updates
@@ -103,53 +106,65 @@ class AdvancedCharts {
      * Get responsive grid options based on screen width
      */
     getResponsiveGridOptions() {
-        const width = window.innerWidth;
-        const isMobile = width < 768;
-        const isTablet = width < 1024;
+         const width = window.innerWidth;
+         const isMobile = width < 480;
+         const isSmallMobile = width < 640;
+         const isTablet = width < 1024;
 
-        if (isMobile) {
-            return {
-                top: 50,
-                left: 45,
-                right: 15,
-                bottom: 40,
-                containLabel: true
-            };
-        } else if (isTablet) {
-            return {
-                top: 60,
-                left: 55,
-                right: 25,
-                bottom: 45,
-                containLabel: true
-            };
-        } else {
-            return {
-                top: 80,
-                left: 60,
-                right: 30,
-                bottom: 50,
-                containLabel: true
-            };
-        }
-    }
+         if (isMobile) {
+             return {
+                 top: 30,
+                 left: 30,
+                 right: 5,
+                 bottom: 25,
+                 containLabel: true
+             };
+         } else if (isSmallMobile) {
+             return {
+                 top: 35,
+                 left: 35,
+                 right: 8,
+                 bottom: 30,
+                 containLabel: true
+             };
+         } else if (isTablet) {
+             return {
+                 top: 45,
+                 left: 45,
+                 right: 15,
+                 bottom: 35,
+                 containLabel: true
+             };
+         } else {
+             return {
+                 top: 70,
+                 left: 55,
+                 right: 25,
+                 bottom: 45,
+                 containLabel: true
+             };
+         }
+     }
 
     /**
      * Get responsive axis label options based on screen width
      */
     getResponsiveAxisLabelOptions() {
-        const width = window.innerWidth;
-        const isMobile = width < 768;
-        const isTablet = width < 1024;
+         const width = window.innerWidth;
+         const isMobile = width < 480;
+         const isSmallMobile = width < 640;
+         const isTablet = width < 1024;
 
-        if (isMobile) {
-            return { fontSize: 9, rotate: 45 };
-        } else if (isTablet) {
-            return { fontSize: 10, rotate: 30 };
-        } else {
-            return { fontSize: 11, rotate: 0 };
-        }
-    }
+         if (isMobile) {
+             return { fontSize: 7, rotate: 50 };
+         } else if (isSmallMobile) {
+             return { fontSize: 8, rotate: 45 };
+         } else if (isTablet) {
+             return { fontSize: 9, rotate: 30 };
+         } else {
+             return { fontSize: 11, rotate: 0 };
+         }
+     }
 
     /**
      * LINE CHART - Savings Growth Trend
@@ -172,35 +187,37 @@ class AdvancedCharts {
         console.log('✓ Savings trend chart initialized');
 
         const data = await this.generateSavingsTrendData();
-        const isMobile = window.innerWidth < 768;
-        const axisLabelOptions = this.getResponsiveAxisLabelOptions();
-        
-        const option = {
-            backgroundColor: 'transparent',
-            textStyle: { fontFamily: 'inherit' },
-            tooltip: {
-                trigger: 'axis',
-                backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                borderColor: '#3B82F6',
-                borderWidth: 1,
-                textStyle: { color: '#fff', fontSize: isMobile ? 10 : 12 },
-                padding: [8, 12],
-                formatter: (params) => {
-                    if (!params.length) return '';
-                    let result = `<strong>${params[0].axisValueLabel}</strong><br/>`;
-                    params.forEach(param => {
-                        result += `<span style="color: ${param.color}; font-size: ${isMobile ? '9px' : '11px'}">● ${param.seriesName}: <strong>UGX ${this.formatNumber(param.value)}</strong></span><br/>`;
-                    });
-                    return result;
-                }
-            },
-            legend: {
-                top: 15,
-                left: 'center',
-                textStyle: { color: '#374151', fontSize: isMobile ? 10 : 12, fontWeight: 500 },
-                itemGap: isMobile ? 8 : 15,
-                orient: isMobile ? 'vertical' : 'horizontal'
-            },
+         const width = window.innerWidth;
+         const isMobile = width < 480;
+         const isSmallMobile = width < 640;
+         const axisLabelOptions = this.getResponsiveAxisLabelOptions();
+         
+         const option = {
+             backgroundColor: 'transparent',
+             textStyle: { fontFamily: 'inherit' },
+             tooltip: {
+                 trigger: 'axis',
+                 backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                 borderColor: '#3B82F6',
+                 borderWidth: 1,
+                 textStyle: { color: '#fff', fontSize: isMobile ? 8 : isSmallMobile ? 9 : 12 },
+                 padding: [6, 10],
+                 formatter: (params) => {
+                     if (!params.length) return '';
+                     let result = `<strong>${params[0].axisValueLabel}</strong><br/>`;
+                     params.forEach(param => {
+                         result += `<span style="color: ${param.color}; font-size: ${isMobile ? '7px' : isSmallMobile ? '8px' : '11px'}">● ${param.seriesName}: <strong>UGX ${this.formatNumber(param.value)}</strong></span><br/>`;
+                     });
+                     return result;
+                 }
+             },
+             legend: {
+                 top: isMobile ? 10 : 15,
+                 left: 'center',
+                 textStyle: { color: '#374151', fontSize: isMobile ? 8 : isSmallMobile ? 9 : 12, fontWeight: 500 },
+                 itemGap: isMobile ? 4 : isSmallMobile ? 8 : 15,
+                 orient: isSmallMobile ? 'vertical' : 'horizontal'
+             },
             grid: this.getResponsiveGridOptions(),
             xAxis: {
                 type: 'category',
@@ -211,12 +228,12 @@ class AdvancedCharts {
                 splitLine: { show: false }
             },
             yAxis: {
-                type: 'value',
-                axisLine: { show: false },
-                axisLabel: { color: '#6B7280', fontSize: 11, formatter: 'UGX {value/1000}K' },
-                splitLine: { lineStyle: { color: '#E5E7EB', type: 'dashed' } },
-                axisTick: { show: false }
-            },
+                 type: 'value',
+                 axisLine: { show: false },
+                 axisLabel: { color: '#6B7280', fontSize: isMobile ? 7 : isSmallMobile ? 8 : 11, formatter: 'UGX {value/1000}K' },
+                 splitLine: { lineStyle: { color: '#E5E7EB', type: 'dashed' } },
+                 axisTick: { show: false }
+             },
             series: [
                 {
                     name: 'Total Savings',
@@ -253,7 +270,7 @@ class AdvancedCharts {
                     type: 'value',
                     position: 'left',
                     axisLine: { show: false },
-                    axisLabel: { color: '#6B7280', fontSize: 11, formatter: 'UGX {value/1000}K' },
+                    axisLabel: { color: '#6B7280', fontSize: isMobile ? 7 : isSmallMobile ? 8 : 11, formatter: 'UGX {value/1000}K' },
                     splitLine: { lineStyle: { color: '#E5E7EB', type: 'dashed' } },
                     axisTick: { show: false }
                 },
@@ -261,7 +278,7 @@ class AdvancedCharts {
                     type: 'value',
                     position: 'right',
                     axisLine: { show: false },
-                    axisLabel: { color: '#6B7280', fontSize: 11 },
+                    axisLabel: { color: '#6B7280', fontSize: isMobile ? 7 : isSmallMobile ? 8 : 11 },
                     splitLine: { show: false },
                     axisTick: { show: false }
                 }
@@ -289,83 +306,93 @@ class AdvancedCharts {
         console.log('✓ Top members chart initialized');
 
         const data = await this.generateTopMembersData();
-        const isMobile = window.innerWidth < 768;
-        const axisLabelOptions = this.getResponsiveAxisLabelOptions();
-        
-        const option = {
-            backgroundColor: 'transparent',
-            textStyle: { fontFamily: 'inherit' },
-            tooltip: {
-                trigger: 'axis',
-                backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                borderColor: '#8B5CF6',
-                borderWidth: 1,
-                textStyle: { color: '#fff', fontSize: isMobile ? 10 : 12 },
-                padding: [8, 12],
-                formatter: (params) => {
-                    if (!params.length) return '';
-                    const param = params[0];
-                    return `<strong>${param.name}</strong><br/><span style="color: ${param.color}; font-size: ${isMobile ? '9px' : '11px'}">● Savings: <strong>UGX ${this.formatNumber(param.value)}</strong></span>`;
-                }
-            },
-            legend: {
-                show: false
-            },
-            grid: this.getResponsiveGridOptions(),
-            xAxis: {
-                type: 'category',
-                data: data.members,
-                axisLine: { show: false },
-                axisLabel: { color: '#6B7280', fontSize: axisLabelOptions.fontSize, rotate: axisLabelOptions.rotate },
-                axisTick: { show: false }
-            },
-            yAxis: {
-                type: 'value',
-                axisLine: { show: false },
-                axisLabel: { color: '#6B7280', fontSize: 11, formatter: 'UGX {value/1000}K' },
-                splitLine: { lineStyle: { color: '#E5E7EB', type: 'dashed' } },
-                axisTick: { show: false }
-            },
-            series: [
-                {
-                    name: 'Savings',
-                    type: 'bar',
-                    data: data.savings,
-                    itemStyle: {
-                        color: new window.echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                            { offset: 0, color: '#EC4899' },
-                            { offset: 1, color: '#8B5CF6' }
-                        ]),
-                        borderRadius: [8, 8, 0, 0],
-                        shadowColor: 'rgba(236, 72, 153, 0.3)',
-                        shadowBlur: 10,
-                        shadowOffsetY: 4
-                    },
-                    emphasis: {
-                        itemStyle: {
-                            color: new window.echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                                { offset: 0, color: '#F472B6' },
-                                { offset: 1, color: '#A78BFA' }
-                            ]),
-                            shadowColor: 'rgba(236, 72, 153, 0.5)',
-                            shadowBlur: 20,
-                            shadowOffsetY: 8
-                        }
-                    },
-                    barWidth: '60%',
-                    label: {
-                        show: true,
-                        position: 'top',
-                        color: '#1F2937',
-                        fontSize: 11,
-                        fontWeight: 600,
-                        formatter: (params) => `UGX ${this.formatNumber(params.value)}`
-                    }
-                }
-            ]
+         console.log('✓ Top Members Data loaded:', data);
+         
+         if (!data || data.members.length === 0) {
+             console.error('❌ No data for Top Members chart');
+             return;
+         }
+
+         const width = window.innerWidth;
+         const isMobile = width < 480;
+         const isSmallMobile = width < 640;
+         const axisLabelOptions = this.getResponsiveAxisLabelOptions();
+         
+         const option = {
+             backgroundColor: 'transparent',
+             textStyle: { fontFamily: 'inherit' },
+             tooltip: {
+                 trigger: 'axis',
+                 backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                 borderColor: '#8B5CF6',
+                 borderWidth: 1,
+                 textStyle: { color: '#fff', fontSize: isMobile ? 8 : isSmallMobile ? 9 : 12 },
+                 padding: [6, 10],
+                 formatter: (params) => {
+                     if (!params.length) return '';
+                     const param = params[0];
+                     return `<strong>${param.name}</strong><br/><span style="color: ${param.color}; font-size: ${isMobile ? '7px' : isSmallMobile ? '8px' : '11px'}">● Savings: <strong>UGX ${this.formatNumber(param.value)}</strong></span>`;
+                 }
+             },
+             legend: {
+                 show: false
+             },
+             grid: this.getResponsiveGridOptions(),
+             xAxis: {
+                 type: 'category',
+                 data: data.members,
+                 axisLine: { show: false },
+                 axisLabel: { color: '#6B7280', fontSize: axisLabelOptions.fontSize, rotate: axisLabelOptions.rotate },
+                 axisTick: { show: false }
+             },
+             yAxis: {
+                 type: 'value',
+                 axisLine: { show: false },
+                 axisLabel: { color: '#6B7280', fontSize: isMobile ? 7 : isSmallMobile ? 8 : 11, formatter: 'UGX {value/1000}K' },
+                 splitLine: { lineStyle: { color: '#E5E7EB', type: 'dashed' } },
+                 axisTick: { show: false }
+             },
+             series: [
+                 {
+                     name: 'Savings',
+                     type: 'bar',
+                     data: data.savings,
+                     itemStyle: {
+                         color: new window.echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                             { offset: 0, color: '#EC4899' },
+                             { offset: 1, color: '#8B5CF6' }
+                         ]),
+                         borderRadius: [8, 8, 0, 0],
+                         shadowColor: 'rgba(236, 72, 153, 0.3)',
+                         shadowBlur: 10,
+                         shadowOffsetY: 4
+                     },
+                     emphasis: {
+                         itemStyle: {
+                             color: new window.echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                 { offset: 0, color: '#F472B6' },
+                                 { offset: 1, color: '#A78BFA' }
+                             ]),
+                             shadowColor: 'rgba(236, 72, 153, 0.5)',
+                             shadowBlur: 20,
+                             shadowOffsetY: 8
+                         }
+                     },
+                     barWidth: isMobile ? '45%' : isSmallMobile ? '55%' : '60%',
+                     label: {
+                         show: !isMobile,
+                         position: 'top',
+                         color: '#1F2937',
+                         fontSize: isMobile ? 7 : isSmallMobile ? 9 : 11,
+                         fontWeight: 600,
+                         formatter: (params) => isMobile ? '' : `UGX ${this.formatNumber(params.value)}`
+                     }
+                 }
+             ]
         };
 
         this.topMembersBarChart.setOption(option);
+        console.log('✓ Top Members chart rendered successfully');
     }
 
     /**
@@ -386,54 +413,56 @@ class AdvancedCharts {
         console.log('✓ Waterfall chart initialized');
 
         const data = await this.generateWaterfallData();
-        const isMobile = window.innerWidth < 768;
-        const isTablet = window.innerWidth < 1024;
-        const axisLabelOptions = this.getResponsiveAxisLabelOptions();
-        
-        const option = {
-            backgroundColor: 'transparent',
-            textStyle: { fontFamily: 'inherit' },
-            tooltip: {
-                trigger: 'axis',
-                backgroundColor: 'rgba(0, 0, 0, 0.85)',
-                borderColor: '#06B6D4',
-                borderWidth: 1,
-                textStyle: { color: '#fff', fontSize: isMobile ? 10 : 12 },
-                padding: [8, 12],
-                formatter: (params) => {
-                    if (!params.length) return '';
-                    const param = params[0];
-                    let label = param.name;
-                    if (param.componentSubType === 'bar') {
-                        label += ` <strong>UGX ${this.formatNumber(Math.abs(param.value))}</strong>`;
-                    }
-                    return label;
-                }
-            },
-            legend: {
-                show: false
-            },
-            grid: {
-                top: isMobile ? 35 : 40,
-                left: isMobile ? 45 : isTablet ? 70 : 100,
-                right: isMobile ? 15 : 30,
-                bottom: isMobile ? 60 : 80,
-                containLabel: true
-            },
-            xAxis: {
-                type: 'category',
-                data: data.categories,
-                axisLine: { show: false },
-                axisLabel: { color: '#374151', fontSize: isMobile ? 8 : axisLabelOptions.fontSize, fontWeight: 500, rotate: isMobile ? 45 : axisLabelOptions.rotate },
-                axisTick: { show: false }
-            },
-            yAxis: {
-                type: 'value',
-                axisLine: { show: false },
-                axisLabel: { color: '#6B7280', fontSize: 11, formatter: 'UGX {value/1000000}M' },
-                splitLine: { lineStyle: { color: '#E5E7EB', type: 'dashed' } },
-                axisTick: { show: false }
-            },
+         const width = window.innerWidth;
+         const isMobile = width < 480;
+         const isSmallMobile = width < 640;
+         const isTablet = width < 1024;
+         const axisLabelOptions = this.getResponsiveAxisLabelOptions();
+         
+         const option = {
+             backgroundColor: 'transparent',
+             textStyle: { fontFamily: 'inherit' },
+             tooltip: {
+                 trigger: 'axis',
+                 backgroundColor: 'rgba(0, 0, 0, 0.85)',
+                 borderColor: '#06B6D4',
+                 borderWidth: 1,
+                 textStyle: { color: '#fff', fontSize: isMobile ? 8 : isSmallMobile ? 9 : 12 },
+                 padding: [6, 10],
+                 formatter: (params) => {
+                     if (!params.length) return '';
+                     const param = params[0];
+                     let label = param.name;
+                     if (param.componentSubType === 'bar') {
+                         label += ` <strong>UGX ${this.formatNumber(Math.abs(param.value))}</strong>`;
+                     }
+                     return label;
+                 }
+             },
+             legend: {
+                 show: false
+             },
+             grid: {
+                 top: isMobile ? 30 : isSmallMobile ? 35 : 40,
+                 left: isMobile ? 35 : isSmallMobile ? 40 : isTablet ? 70 : 100,
+                 right: isMobile ? 8 : isSmallMobile ? 10 : 30,
+                 bottom: isMobile ? 50 : isSmallMobile ? 60 : 80,
+                 containLabel: true
+             },
+             xAxis: {
+                 type: 'category',
+                 data: data.categories,
+                 axisLine: { show: false },
+                 axisLabel: { color: '#374151', fontSize: axisLabelOptions.fontSize, fontWeight: 500, rotate: axisLabelOptions.rotate },
+                 axisTick: { show: false }
+             },
+             yAxis: {
+                 type: 'value',
+                 axisLine: { show: false },
+                 axisLabel: { color: '#6B7280', fontSize: isMobile ? 7 : isSmallMobile ? 8 : 11, formatter: 'UGX {value/1000000}M' },
+                 splitLine: { lineStyle: { color: '#E5E7EB', type: 'dashed' } },
+                 axisTick: { show: false }
+             },
             series: [
                 {
                     name: 'Financial Flow',
@@ -441,51 +470,29 @@ class AdvancedCharts {
                     stack: 'Total',
                     data: data.values,
                     itemStyle: {
-                        color: (params) => {
-                            const colors = {
-                                'Total Loaned': '#3B82F6',
-                                'Total Repaid': '#10B981',
-                                'Interest Earned': '#F59E0B',
-                                'Outstanding': '#EF4444',
-                                'Total Savings': '#8B5CF6',
-                                'Net Position': '#06B6D4'
-                            };
-                            return colors[params.name] || '#3B82F6';
-                        },
-                        borderRadius: [8, 8, 0, 0],
-                        shadowColor: (params) => {
-                            const shadowColors = {
-                                'Total Loaned': 'rgba(59, 130, 246, 0.3)',
-                                'Total Repaid': 'rgba(16, 185, 129, 0.3)',
-                                'Interest Earned': 'rgba(245, 158, 11, 0.3)',
-                                'Outstanding': 'rgba(239, 68, 68, 0.3)',
-                                'Total Savings': 'rgba(139, 92, 246, 0.3)',
-                                'Net Position': 'rgba(6, 182, 212, 0.3)'
-                            };
-                            return shadowColors[params.name] || 'rgba(59, 130, 246, 0.3)';
-                        },
-                        shadowBlur: 12,
-                        shadowOffsetY: 5
-                    },
+                         color: (params) => {
+                             const premiumColors = {
+                                 'Total Loaned': '#2563EB',
+                                 'Total Repaid': '#059669',
+                                 'Interest Earned': '#D97706',
+                                 'Outstanding': '#DC2626',
+                                 'Total Savings': '#7C3AED',
+                                 'Net Position': '#0891B2'
+                             };
+                             return premiumColors[params.name] || '#2563EB';
+                         },
+                         borderRadius: [8, 8, 0, 0]
+                     },
                     emphasis: {
-                        itemStyle: {
-                            opacity: 0.9,
-                            shadowBlur: 20,
-                            shadowOffsetY: 8
-                        }
-                    },
+                         itemStyle: {
+                             opacity: 0.9,
+                             shadowColor: 'rgba(0, 0, 0, 0.1)',
+                             shadowBlur: 6,
+                             shadowOffsetY: 2
+                         }
+                     },
                     label: {
-                        show: true,
-                        position: 'top',
-                        color: '#1F2937',
-                        fontSize: 12,
-                        fontWeight: 600,
-                        formatter: (params) => {
-                            if (params.value) {
-                                return `UGX ${this.formatNumber(Math.abs(params.value))}`;
-                            }
-                            return '';
-                        }
+                        show: false
                     },
                     barWidth: '55%'
                 }
@@ -499,65 +506,39 @@ class AdvancedCharts {
      * Generate Savings Trend Data (from IndexDB)
      */
     async generateSavingsTrendData() {
-        try {
-            // Use Storage module to get savings (stored as array with key 'savings')
-            const savings = await Storage.get('savings') || [];
-            console.log('✓ Fetched savings from IndexDB:', savings.length, 'records');
-            
-            // If no real data, use sample data
-            if (!Array.isArray(savings) || savings.length === 0) {
-                console.warn('No savings data found, using sample data');
-                return this.getSampleSavingsTrendData();
-            }
-            
-            // Create daily aggregation
-            const dailyData = {};
-            savings.forEach(s => {
-                const date = s.date ? new Date(s.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : 'Unknown';
-                if (!dailyData[date]) {
-                    dailyData[date] = { total: 0, members: new Set() };
-                }
-                dailyData[date].total += s.amount || 0;
-                dailyData[date].members.add(s.memberId);
-            });
+         try {
+             // Use Storage module to get savings (stored as array with key 'savings')
+             const savings = await Storage.get('savings') || [];
+             console.log('✓ Fetched savings from IndexDB:', savings.length, 'records');
+             
+             // Create daily aggregation from real data only
+             const dailyData = {};
+             savings.forEach(s => {
+                 const date = s.savingDate ? new Date(s.savingDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : 'Unknown';
+                 if (!dailyData[date]) {
+                     dailyData[date] = { total: 0, members: new Set() };
+                 }
+                 dailyData[date].total += s.amount || 0;
+                 dailyData[date].members.add(s.memberId);
+             });
 
-            const dates = Object.keys(dailyData).slice(-12); // Last 12 days
-            
-            let cumulativeTotal = 0;
-            const totalSavings = dates.map(date => {
-                cumulativeTotal += dailyData[date]?.total || 0;
-                return cumulativeTotal;
-            });
-            const memberCount = dates.map(date => dailyData[date]?.members.size || 0);
+             const dates = Object.keys(dailyData).slice(-12); // Last 12 days
+             
+             let cumulativeTotal = 0;
+             const totalSavings = dates.map(date => {
+                 cumulativeTotal += dailyData[date]?.total || 0;
+                 return cumulativeTotal;
+             });
+             const memberCount = dates.map(date => dailyData[date]?.members.size || 0);
 
-            console.log('✓ Savings Trend Data (REAL):', { dates: dates.length, totalSavings: totalSavings[totalSavings.length - 1] });
-            return { dates, totalSavings, memberCount };
-        } catch (error) {
-            console.error('Error fetching savings data:', error);
-            return this.getSampleSavingsTrendData();
-        }
-    }
-
-    getSampleSavingsTrendData() {
-        console.log('📊 Using SAMPLE data for Savings Trend');
-        const dates = [];
-        for (let i = 11; i >= 0; i--) {
-            const date = new Date();
-            date.setDate(date.getDate() - i);
-            const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-            dates.push(dateStr);
-        }
-        
-        let cumulativeTotal = 0;
-        const totalSavings = dates.map(() => {
-            cumulativeTotal += Math.floor(Math.random() * 50000) + 10000;
-            return cumulativeTotal;
-        });
-        
-        const memberCount = dates.map(() => Math.floor(Math.random() * 5) + 1);
-        console.log('✓ Sample Savings Data:', { dates: dates.length, totalSavings: totalSavings[totalSavings.length - 1] });
-        return { dates, totalSavings, memberCount };
-    }
+             console.log('✓ Savings Trend Data (REAL):', { dates: dates.length, totalSavings: totalSavings[totalSavings.length - 1] });
+             return { dates, totalSavings, memberCount };
+         } catch (error) {
+             console.error('Error fetching savings data:', error);
+             // Return empty chart data
+             return { dates: [], totalSavings: [], memberCount: [] };
+         }
+     }
 
     /**
      * Generate Top Members Data (from IndexDB)
@@ -582,15 +563,6 @@ class AdvancedCharts {
                 .sort((a, b) => b.savings - a.savings)
                 .slice(0, 8);
 
-            // If no data, create sample members
-            if (topMembers.length === 0 && members.length > 0) {
-                console.warn('No savings data, creating sample data from members');
-                topMembers = members.slice(0, 8).map((m, idx) => ({
-                    name: m.name || `Member ${idx + 1}`,
-                    savings: Math.floor(Math.random() * 500000) + 100000
-                }));
-            }
-
             console.log('Top Members Data:', topMembers);
             return {
                 members: topMembers.map(m => m.name),
@@ -598,16 +570,12 @@ class AdvancedCharts {
             };
         } catch (error) {
             console.error('Error fetching top members data:', error);
-            return this.getSampleTopMembersData();
+            // Return empty data
+            return {
+                members: [],
+                savings: []
+            };
         }
-    }
-
-    getSampleTopMembersData() {
-        const sampleMembers = ['Alice Johnson', 'Bob Smith', 'Charlie Brown', 'Diana Prince', 'Eve Wilson', 'Frank Miller', 'Grace Lee', 'Henry Davis'];
-        return {
-            members: sampleMembers,
-            savings: sampleMembers.map(() => Math.floor(Math.random() * 500000) + 100000)
-        };
     }
 
     /**
@@ -634,25 +602,17 @@ class AdvancedCharts {
                                - withdrawals.reduce((sum, w) => sum + (w.amount || 0), 0);
             const netPosition = totalRepaid + interestEarned + totalSavings - outstanding;
 
-            // If all zeros, use sample data
-            if (totalLoaned === 0 && totalRepaid === 0 && totalSavings === 0) {
-                console.warn('No financial data found, using sample data');
-                return {
-                    categories: ['Total Loaned', 'Total Repaid', 'Interest Earned', 'Outstanding', 'Total Savings', 'Net Position'],
-                    values: [1000000, 450000, 50000, 550000, 300000, 250000]
-                };
-            }
-
-            console.log('Waterfall Data:', { totalLoaned, totalRepaid, interestEarned, outstanding, totalSavings, netPosition });
+            console.log('Waterfall Data (REAL):', { totalLoaned, totalRepaid, interestEarned, outstanding, totalSavings, netPosition });
             return {
                 categories: ['Total Loaned', 'Total Repaid', 'Interest Earned', 'Outstanding', 'Total Savings', 'Net Position'],
                 values: [totalLoaned, totalRepaid, interestEarned, -outstanding, totalSavings, netPosition]
             };
         } catch (error) {
             console.error('Error fetching waterfall data:', error);
+            // Return zeros for no data
             return {
                 categories: ['Total Loaned', 'Total Repaid', 'Interest Earned', 'Outstanding', 'Total Savings', 'Net Position'],
-                values: [1000000, 450000, 50000, 550000, 300000, 250000]
+                values: [0, 0, 0, 0, 0, 0]
             };
         }
     }
@@ -884,39 +844,41 @@ class AdvancedCharts {
         console.log('✓ Comparison chart initialized');
 
         const data = await this.generateComparisonData();
-        const isPeriodMonthly = this.filters.comparisonPeriod === 'monthly';
-        const isMobile = window.innerWidth < 768;
-        const axisLabelOptions = this.getResponsiveAxisLabelOptions();
+         const isPeriodMonthly = this.filters.comparisonPeriod === 'monthly';
+         const width = window.innerWidth;
+         const isMobile = width < 480;
+         const isSmallMobile = width < 640;
+         const axisLabelOptions = this.getResponsiveAxisLabelOptions();
 
-        const option = {
-            backgroundColor: 'transparent',
-            textStyle: { fontFamily: 'inherit' },
-            tooltip: {
-                trigger: 'axis',
-                backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                borderColor: '#06B6D4',
-                textStyle: { color: '#fff', fontSize: isMobile ? 10 : 12 },
-                padding: [8, 12]
-            },
-            legend: {
-                top: 15,
-                left: 'center',
-                textStyle: { color: '#374151', fontSize: isMobile ? 10 : 12 },
-                orient: isMobile ? 'vertical' : 'horizontal'
-            },
-            grid: this.getResponsiveGridOptions(),
-            xAxis: {
-                type: 'category',
-                data: data.periods,
-                axisLine: { lineStyle: { color: '#E5E7EB' } },
-                axisLabel: { color: '#6B7280', fontSize: axisLabelOptions.fontSize, rotate: axisLabelOptions.rotate }
-            },
-            yAxis: {
-                type: 'value',
-                axisLine: { show: false },
-                axisLabel: { color: '#6B7280', fontSize: 11, formatter: 'UGX {value/1000}K' },
-                splitLine: { lineStyle: { color: '#E5E7EB', type: 'dashed' } }
-            },
+         const option = {
+             backgroundColor: 'transparent',
+             textStyle: { fontFamily: 'inherit' },
+             tooltip: {
+                 trigger: 'axis',
+                 backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                 borderColor: '#06B6D4',
+                 textStyle: { color: '#fff', fontSize: isMobile ? 8 : isSmallMobile ? 9 : 12 },
+                 padding: [6, 10]
+             },
+             legend: {
+                 top: isMobile ? 10 : 15,
+                 left: 'center',
+                 textStyle: { color: '#374151', fontSize: isMobile ? 8 : isSmallMobile ? 9 : 12 },
+                 orient: isSmallMobile ? 'vertical' : 'horizontal'
+             },
+             grid: this.getResponsiveGridOptions(),
+             xAxis: {
+                 type: 'category',
+                 data: data.periods,
+                 axisLine: { lineStyle: { color: '#E5E7EB' } },
+                 axisLabel: { color: '#6B7280', fontSize: axisLabelOptions.fontSize, rotate: axisLabelOptions.rotate }
+             },
+             yAxis: {
+                 type: 'value',
+                 axisLine: { show: false },
+                 axisLabel: { color: '#6B7280', fontSize: isMobile ? 7 : isSmallMobile ? 8 : 11, formatter: 'UGX {value/1000}K' },
+                 splitLine: { lineStyle: { color: '#E5E7EB', type: 'dashed' } }
+             },
             series: [
                 {
                     name: isPeriodMonthly ? 'Current Month' : 'Current Year',
@@ -954,44 +916,53 @@ class AdvancedCharts {
         console.log('✓ Repayment metrics chart initialized');
 
         const data = await this.generateRepaymentMetricsData();
-        const isMobile = window.innerWidth < 768;
-        const axisLabelOptions = this.getResponsiveAxisLabelOptions();
+         console.log('✓ Repayment Metrics Data loaded:', data);
+         
+         if (!data || data.members.length === 0) {
+             console.error('❌ No data for Repayment Metrics chart');
+             return;
+         }
 
-        const option = {
-            backgroundColor: 'transparent',
-            textStyle: { fontFamily: 'inherit' },
-            tooltip: {
-                trigger: 'axis',
-                backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                borderColor: '#10B981',
-                textStyle: { color: '#fff', fontSize: isMobile ? 10 : 12 },
-                formatter: (params) => {
-                    let result = `<strong>${params[0].axisValueLabel}</strong><br/>`;
-                    params.forEach(param => {
-                        result += `<span style="color: ${param.color}; font-size: ${isMobile ? '9px' : '11px'}">● ${param.seriesName}: <strong>UGX ${this.formatNumber(param.value)}</strong></span><br/>`;
-                    });
-                    return result;
-                }
-            },
-            legend: {
-                top: 15,
-                left: 'center',
-                textStyle: { color: '#374151', fontSize: isMobile ? 10 : 12 },
-                orient: isMobile ? 'vertical' : 'horizontal'
-            },
-            grid: this.getResponsiveGridOptions(),
-            xAxis: {
-                type: 'category',
-                data: data.members,
-                axisLine: { lineStyle: { color: '#E5E7EB' } },
-                axisLabel: { color: '#6B7280', fontSize: isMobile ? 8 : axisLabelOptions.fontSize, rotate: isMobile ? 45 : axisLabelOptions.rotate }
-            },
-            yAxis: {
-                type: 'value',
-                axisLine: { show: false },
-                axisLabel: { color: '#6B7280', fontSize: 11, formatter: 'UGX {value/1000}K' },
-                splitLine: { lineStyle: { color: '#E5E7EB', type: 'dashed' } }
-            },
+         const width = window.innerWidth;
+         const isMobile = width < 480;
+         const isSmallMobile = width < 640;
+         const axisLabelOptions = this.getResponsiveAxisLabelOptions();
+
+         const option = {
+             backgroundColor: 'transparent',
+             textStyle: { fontFamily: 'inherit' },
+             tooltip: {
+                 trigger: 'axis',
+                 backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                 borderColor: '#10B981',
+                 textStyle: { color: '#fff', fontSize: isMobile ? 8 : isSmallMobile ? 9 : 12 },
+                 formatter: (params) => {
+                     let result = `<strong>${params[0].axisValueLabel}</strong><br/>`;
+                     params.forEach(param => {
+                         result += `<span style="color: ${param.color}; font-size: ${isMobile ? '7px' : isSmallMobile ? '8px' : '11px'}">● ${param.seriesName}: <strong>UGX ${this.formatNumber(param.value)}</strong></span><br/>`;
+                     });
+                     return result;
+                 }
+             },
+             legend: {
+                 top: isMobile ? 10 : 15,
+                 left: 'center',
+                 textStyle: { color: '#374151', fontSize: isMobile ? 8 : isSmallMobile ? 9 : 12 },
+                 orient: isSmallMobile ? 'vertical' : 'horizontal'
+             },
+             grid: this.getResponsiveGridOptions(),
+             xAxis: {
+                 type: 'category',
+                 data: data.members,
+                 axisLine: { lineStyle: { color: '#E5E7EB' } },
+                 axisLabel: { color: '#6B7280', fontSize: axisLabelOptions.fontSize, rotate: axisLabelOptions.rotate }
+             },
+             yAxis: {
+                 type: 'value',
+                 axisLine: { show: false },
+                 axisLabel: { color: '#6B7280', fontSize: isMobile ? 7 : isSmallMobile ? 8 : 11, formatter: 'UGX {value/1000}K' },
+                 splitLine: { lineStyle: { color: '#E5E7EB', type: 'dashed' } }
+             },
             series: [
                 {
                     name: 'Principal Paid',
@@ -1011,6 +982,7 @@ class AdvancedCharts {
         };
 
         this.repaymentMetricsChart.setOption(option);
+        console.log('✓ Repayment Metrics chart rendered successfully');
     }
 
     /**
@@ -1034,27 +1006,31 @@ class AdvancedCharts {
             const previousMonthData = {};
 
             savings.forEach(s => {
-                const date = new Date(s.date || new Date());
+                const date = new Date(s.savingDate || s.date || new Date());
                 const week = Math.ceil(date.getDate() / 7);
 
                 if (date.getMonth() === thisMonth && date.getFullYear() === thisYear) {
-                    currentMonthData[`Week ${week}`] = (currentMonthData[`Week ${week}`] || 0) + s.amount;
+                    currentMonthData[`Week ${week}`] = (currentMonthData[`Week ${week}`] || 0) + (s.amount || 0);
                 } else if (date.getMonth() === lastMonth && date.getFullYear() === lastMonthYear) {
-                    previousMonthData[`Week ${week}`] = (previousMonthData[`Week ${week}`] || 0) + s.amount;
+                    previousMonthData[`Week ${week}`] = (previousMonthData[`Week ${week}`] || 0) + (s.amount || 0);
                 }
             });
 
-            let periods = [...new Set([...Object.keys(currentMonthData), ...Object.keys(previousMonthData)])].sort();
+            let periods = [...new Set([...Object.keys(currentMonthData), ...Object.keys(previousMonthData)])].sort((a, b) => {
+                const weekA = parseInt(a.split(' ')[1]);
+                const weekB = parseInt(b.split(' ')[1]);
+                return weekA - weekB;
+            });
             
-            // If no data, create sample weeks
+            // If no data, show all 4 weeks with zeros
             if (periods.length === 0) {
                 periods = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
             }
 
             return {
                 periods,
-                current: periods.map(p => currentMonthData[p] || Math.floor(Math.random() * 200000)),
-                previous: periods.map(p => previousMonthData[p] || Math.floor(Math.random() * 180000))
+                current: periods.map(p => currentMonthData[p] || 0),
+                previous: periods.map(p => previousMonthData[p] || 0)
             };
         } else {
             // Year-over-Year comparison
@@ -1067,31 +1043,29 @@ class AdvancedCharts {
             const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
             savings.forEach(s => {
-                const date = new Date(s.date || new Date());
+                const date = new Date(s.savingDate || s.date || new Date());
                 const monthName = months[date.getMonth()];
 
                 if (date.getFullYear() === thisYear) {
-                    currentYearData[monthName] = (currentYearData[monthName] || 0) + s.amount;
+                    currentYearData[monthName] = (currentYearData[monthName] || 0) + (s.amount || 0);
                 } else if (date.getFullYear() === lastYear) {
-                    previousYearData[monthName] = (previousYearData[monthName] || 0) + s.amount;
+                    previousYearData[monthName] = (previousYearData[monthName] || 0) + (s.amount || 0);
                 }
             });
-
-            // If no data, create sample month data
-            const hasData = Object.keys(currentYearData).length > 0 || Object.keys(previousYearData).length > 0;
             
             return {
                 periods: months,
-                current: months.map(m => currentYearData[m] || (hasData ? 0 : Math.floor(Math.random() * 300000))),
-                previous: months.map(m => previousYearData[m] || (hasData ? 0 : Math.floor(Math.random() * 280000)))
+                current: months.map(m => currentYearData[m] || 0),
+                previous: months.map(m => previousYearData[m] || 0)
             };
         }
         } catch (error) {
             console.error('Error fetching comparison data:', error);
+            // Return empty data instead of sample data
             return {
                 periods: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
-                current: [100000, 150000, 120000, 200000],
-                previous: [90000, 140000, 110000, 180000]
+                current: [0, 0, 0, 0],
+                previous: [0, 0, 0, 0]
             };
         }
     }
@@ -1138,36 +1112,22 @@ class AdvancedCharts {
             .sort((a, b) => b.totalAmount - a.totalAmount)
             .slice(0, 8);
 
-        // If no data, create sample from members
-        if (topMembers.length === 0 && members.length > 0) {
-            console.warn('No repayment data, creating sample data');
-            topMembers = members.slice(0, 8).map((m, idx) => ({
-                name: m.name || `Member ${idx + 1}`,
-                principal: Math.floor(Math.random() * 400000) + 50000,
-                interest: Math.floor(Math.random() * 50000) + 5000,
-                totalAmount: 0
-            }));
-        }
-
-            console.log('Repayment Metrics Data:', topMembers);
-            return {
-                members: topMembers.map(m => m.name),
-                principal: topMembers.map(m => Math.round(m.principal)),
-                interest: topMembers.map(m => Math.round(m.interest))
-            };
+        // Return real data (empty if no loans/payments exist)
+         console.log('Repayment Metrics Data:', topMembers);
+         return {
+             members: topMembers.map(m => m.name),
+             principal: topMembers.map(m => Math.round(m.principal)),
+             interest: topMembers.map(m => Math.round(m.interest))
+         };
         } catch (error) {
             console.error('Error fetching repayment data:', error);
-            return this.getSampleRepaymentMetricsData();
+            // Return empty data instead of sample data
+            return {
+                members: [],
+                principal: [],
+                interest: []
+            };
         }
-    }
-
-    getSampleRepaymentMetricsData() {
-        const sampleMembers = ['Alice Johnson', 'Bob Smith', 'Charlie Brown', 'Diana Prince', 'Eve Wilson', 'Frank Miller', 'Grace Lee', 'Henry Davis'];
-        return {
-            members: sampleMembers,
-            principal: sampleMembers.map(() => Math.floor(Math.random() * 400000) + 50000),
-            interest: sampleMembers.map(() => Math.floor(Math.random() * 50000) + 5000)
-        };
     }
 
     /**

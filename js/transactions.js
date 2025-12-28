@@ -33,6 +33,7 @@ const TransactionManager = {
     setupEventListeners() {
         const memberSelect = document.getElementById('transactionMemberSelect');
         if (memberSelect) {
+            // Handle both native change and Select2 change events
             memberSelect.addEventListener('change', (e) => {
                 this.currentMemberId = e.target.value;
                 if (this.currentMemberId) {
@@ -41,6 +42,21 @@ const TransactionManager = {
                     this.clearTransactionView();
                 }
             });
+            
+            // Also bind to Select2 change event if Select2 is available
+            if (typeof jQuery !== 'undefined') {
+                jQuery(memberSelect).on('select2:select', (e) => {
+                    this.currentMemberId = e.params.data.id;
+                    if (this.currentMemberId) {
+                        this.loadMemberTransactions(this.currentMemberId);
+                    } else {
+                        this.clearTransactionView();
+                    }
+                }).on('select2:clearing', () => {
+                    this.currentMemberId = null;
+                    this.clearTransactionView();
+                });
+            }
         }
 
         // Export transactions button
@@ -69,11 +85,9 @@ const TransactionManager = {
                     select.appendChild(option);
                 });
                 
-                // Refresh virtual-select if available
-                if (typeof window.VirtualSelect !== 'undefined') {
-                    setTimeout(() => {
-                        window.VirtualSelect.init({ el: '#transactionMemberSelect' });
-                    }, 0);
+                // Refresh Select2 if available
+                if (typeof jQuery !== 'undefined' && jQuery(select).data('select2')) {
+                    jQuery(select).trigger('change');
                 }
             }
         } catch (error) {
@@ -562,5 +576,18 @@ const TransactionManager = {
 
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
-    TransactionManager.init();
+    // Wait for Select2 to be initialized first
+    const checkSelect2 = setInterval(() => {
+        const select = document.getElementById('transactionMemberSelect');
+        if (select && typeof jQuery !== 'undefined' && jQuery(select).data('select2')) {
+            clearInterval(checkSelect2);
+            TransactionManager.init();
+        }
+    }, 100);
+    
+    // Fallback timeout
+    setTimeout(() => {
+        clearInterval(checkSelect2);
+        TransactionManager.init();
+    }, 2000);
 });
