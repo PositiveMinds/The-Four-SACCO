@@ -1,0 +1,1277 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover, minimum-scale=1, maximum-scale=5, user-scalable=yes, shrink-to-fit=no">
+    <meta name="apple-mobile-web-app-title" content="The Four">
+    <meta name="application-name" content="The Four">
+    <meta name="theme-color" content="#FFCC00" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+    <meta name="msapplication-TileColor" content="#FFCC00">
+    <meta name="msapplication-TileImage" content="/images/image-192.png">
+    <meta name="msapplication-config" content="/browserconfig.xml">
+    <title>The Four - SACCO Management System</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/16x16.png">
+    
+    <!-- Apple Touch Icons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/180x180.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/images/144x144.png">
+    <link rel="apple-touch-icon" sizes="64x64" href="/images/64x64.png">
+    
+    <!-- PWA Splash Screens for iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-standalone" content="yes">
+
+    <!-- Bootstrap 5 CSS (Local) -->
+    <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
+
+    <!-- Remix Icons (Local) -->
+    <link rel="stylesheet" href="css/remixicon.css">
+
+    <!-- SweetAlert2 CSS (Bootstrap 5 Theme) -->
+    <link rel="stylesheet" href="vendor/sweetalert/themes/bootstrap-5.css">
+
+    <!-- Theme Customization (overrides Bootstrap defaults) -->
+    <link rel="stylesheet" href="css/theme.css">
+
+    <!-- Additional Custom Styles (complementary to Bootstrap) -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- Advanced Charts Styling -->
+    <link rel="stylesheet" href="css/advanced-charts.css">
+
+    <!-- Choices.js CSS (Local) -->
+    <link rel="stylesheet" href="vendor/Choices/public/assets/styles/choices.min.css">
+    
+    <!-- Manifest for PWA -->
+    <link rel="manifest" href="/manifest.json">
+</head>
+
+<body>
+    <!-- Splash Screen -->
+    <div id="splashScreen" class="splash-screen">
+        <div class="splash-content">
+            <img src="/images/image-192.png" alt="The Four" class="splash-logo">
+            <h1 class="splash-title">The Four</h1>
+            <p class="splash-subtitle">SACCO Management System</p>
+            <div class="splash-loader">
+                <div class="spinner"></div>
+            </div>
+            <p class="splash-loading-text">Loading...</p>
+        </div>
+    </div>
+
+    <!-- Install Reminder Banner (Desktop) -->
+    <div id="installBanner" class="install-banner" style="display: none;">
+        <div class="install-banner-content">
+            <div class="install-banner-left">
+                <i class="ri-cloud-download-line"></i>
+                <div>
+                    <strong>Install The Four App</strong>
+                    <p>Get offline access and a faster experience</p>
+                </div>
+            </div>
+            <div class="install-banner-actions">
+                <button id="installBannerBtn" class="btn btn-sm btn-primary">Install</button>
+                <button id="dismissBannerBtn" class="btn btn-sm btn-outline-secondary">Dismiss</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="min-vh-100 d-flex flex-column">
+        <!-- Header -->
+        <header class="mb-0"
+            style="width: 100%; background: linear-gradient(135deg, #FFCC00 0%, #FFDC4E 50%, #FFE6B3 100%); box-shadow: 0 8px 32px rgba(255, 204, 0, 0.35); position: relative; overflow: hidden;">
+            <!-- Decorative background elements -->
+            <div
+                style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle at 15% 50%, rgba(255,255,255,0.15) 0%, transparent 50%), radial-gradient(circle at 85% 85%, rgba(255,255,255,0.1) 0%, transparent 50%); pointer-events: none; z-index: 0;">
+            </div>
+
+            <div class="container-fluid"
+                style="padding-left: 1.5rem; padding-right: 1.5rem; padding-top: 2.5rem; padding-bottom: 2.5rem; position: relative; z-index: 1;">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h1 class="mb-1 responsive-header"
+                            style="letter-spacing: -1.5px; color: #0f0f0f; text-shadow: 0 2px 8px rgba(0,0,0,0.12); font-weight: 800; margin-bottom: 0.5rem;">
+                            <img src="/images/image-192.png" alt="The Four" style="height: 2.5rem; width: auto; vertical-align: middle; margin-right: 0.5rem;"> The Four
+                        </h1>
+                        <p class="mb-0 responsive-subheader" style="opacity: 0.95; color: #1a1a1a; font-weight: 500;">
+                            Savings and Credit Cooperative Society Management
+                        </p>
+                    </div>
+                    <div class="col-md-4 text-end d-flex justify-content-end gap-2 flex-wrap align-items-center">
+                        <button id="pwaInstallBtn" class="btn btn-dark btn-sm pwa-install-btn" 
+                            style="background: rgba(0,0,0,0.15); border: 1px solid rgba(0,0,0,0.2); color: #0f0f0f; font-weight: 600; padding: 0.5rem 1rem; border-radius: 8px; transition: all 0.3s ease; display: inline-block !important;"
+                            onmouseover="this.style.background='rgba(0,0,0,0.25)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.15)'"
+                            onmouseout="this.style.background='rgba(0,0,0,0.15)'; this.style.boxShadow='none'">
+                            <i class="ri-download-line" style="margin-right: 0.5rem;"></i>Install App
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <nav class="" style="background: white; box-shadow: 0 4px 12px rgba(0,0,0,0.08); z-index: 100;">
+            <div class="container-fluid">
+                <ul class="nav professional-tabs" role="tablist"
+                    style="border-bottom: none; padding: 0;">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active nav-btn" id="dashboard-tab" data-page="dashboard" type="button">
+                            <span style="font-size: 1.1rem; margin-right: 0.5rem;">📊</span>Dashboard
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link nav-btn" id="members-tab" data-page="members" type="button">
+                            <span style="font-size: 1.1rem; margin-right: 0.5rem;">👥</span>Members
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link nav-btn" id="loans-tab" data-page="loans" type="button">
+                            <span style="font-size: 1.1rem; margin-right: 0.5rem;">💰</span>Loans
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link nav-btn" id="payments-tab" data-page="payments" type="button">
+                            <span style="font-size: 1.1rem; margin-right: 0.5rem;">💳</span>Payments
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link nav-btn" id="reports-tab" data-page="reports" type="button">
+                            <span style="font-size: 1.1rem; margin-right: 0.5rem;">📈</span>Reports
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link nav-btn" id="transactions-tab" data-page="transactions" type="button">
+                            <span style="font-size: 1.1rem; margin-right: 0.5rem;">📊</span>Transactions
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link nav-btn" id="savings-tab" data-page="savings" type="button">
+                            <span style="font-size: 1.1rem; margin-right: 0.5rem;">🏦</span>Savings
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="flex-grow-1" style="background: linear-gradient(135deg, var(--light) 0%, #ffffff 100%);">
+            <div class="container-fluid" style="padding: 2rem 1rem;">
+                <!-- Dashboard Page -->
+                <section id="dashboard" class="page active">
+                    <div class="mb-4">
+                        <h2 class="mb-4">Dashboard</h2>
+
+                        <!-- Stats Grid -->
+                        <div class="row g-4 mb-5">
+                            <div class="col-sm-6 col-lg-4 col-xl-2">
+                                <div class="card stat-card shadow-sm">
+                                    <div class="card-body p-4">
+                                        <p class="card-text text-muted mb-3"
+                                            style="font-size: 0.85rem; font-weight: 500;">👥 Total Members</p>
+                                        <p class="stat-number mb-0" id="totalMembers">0</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-lg-4 col-xl-2">
+                                <div class="card stat-card shadow-sm">
+                                    <div class="card-body p-4">
+                                        <p class="card-text text-muted mb-3"
+                                            style="font-size: 0.85rem; font-weight: 500;">📋 Active Loans</p>
+                                        <p class="stat-number mb-0" id="activeLoans">0</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-lg-4 col-xl-2">
+                                <div class="card stat-card shadow-sm">
+                                    <div class="card-body p-4">
+                                        <p class="card-text text-muted mb-3"
+                                            style="font-size: 0.85rem; font-weight: 500;">💰 Total Loaned</p>
+                                        <p class="stat-number mb-0" id="totalLoaned">UGX 0</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-lg-4 col-xl-2">
+                                <div class="card stat-card shadow-sm">
+                                    <div class="card-body p-4">
+                                        <p class="card-text text-muted mb-3"
+                                            style="font-size: 0.85rem; font-weight: 500;">✅ Total Repaid</p>
+                                        <p class="stat-number mb-0" id="totalRepaid">UGX 0</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-lg-4 col-xl-2">
+                                <div class="card stat-card shadow-sm bg-primary-light">
+                                    <div class="card-body p-4">
+                                        <p class="card-text text-muted mb-3"
+                                            style="font-size: 0.85rem; font-weight: 500;">📊 Outstanding</p>
+                                        <p class="stat-number text-primary mb-0" id="outstandingBalance">UGX 0</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-lg-4 col-xl-2">
+                                <div class="card stat-card shadow-sm bg-warning-light">
+                                    <div class="card-body p-4">
+                                        <p class="card-text text-muted mb-3"
+                                            style="font-size: 0.85rem; font-weight: 500;">⚠️ Overdue</p>
+                                        <p class="stat-number text-warning mb-0" id="overdueLoans">0</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <!-- Recent Activity -->
+                        <div class="card shadow-sm">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">📝 Recent Activity</h5>
+                                <div class="input-group" style="max-width: 200px;">
+                                    <span class="input-group-text bg-white border-end-0">
+                                        <i class="ri-filter-line"></i>
+                                    </span>
+                                    <select class="form-select border-start-0" id="activityMemberFilter">
+                                        <option value="">All Members</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <table class="table table-hover mb-0">
+                                        <thead >
+                                            <tr>
+                                                <th>Member</th>
+                                                <th>Type</th>
+                                                <th>Amount</th>
+                                                <th>Date</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="recentActivity">
+                                            <tr>
+                                                <td colspan="4" class="text-center text-muted py-4">No recent activity
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div id="activitiesPagination"></div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Members Page -->
+                <section id="members" class="page">
+                    <h2 class="mb-4">Members Management</h2>
+
+                    <div class="row">
+                        <div class="col-lg-4 mb-4">
+                            <div class="card shadow-sm">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Register New Member</h5>
+                                </div>
+                                <div class="card-body">
+                                    <form id="memberForm">
+                                        <div class="mb-3">
+                                            <label for="memberPhoto" class="form-label">Member Photo</label>
+                                            <div class="upload-area" style="position: relative;">
+                                                <div class="photo-upload-container">
+                                                    <input type="file" class="form-control" id="memberPhoto" accept="image/*" onchange="App.previewMemberPhoto(event)" style="position: relative; z-index: 2;">
+                                                    <div id="photoUploadHint" class="photo-upload-hint" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; font-size: 0.85rem; color: #6c757d; z-index: 1;">
+                                                        <i class="ri-image-add-line" style="margin-right: 0.5rem; font-size: 1.5rem;"></i> Click to upload
+                                                    </div>
+                                                </div>
+                                                <button type="button" class="btn btn-sm btn-outline-primary" id="viewPhotoBtn" style="display: none; width: 100%; margin-top: 0.5rem;" onclick="App.viewPhotoModal()" title="View photo">
+                                                    <i class="ri-image-view-line"></i> View Photo
+                                                </button>
+                                            </div>
+                                            <small class="text-muted">JPG, PNG up to 5MB</small>
+                                        </div>
+                                        <div class="mb-3">
+                                             <label for="memberName" class="form-label">Full Name</label>
+                                             <input type="text" class="form-control" id="memberName"
+                                                 placeholder="Full Name" required>
+                                         </div>
+                                         <div class="mb-3">
+                                             <label for="memberEmail" class="form-label">Email</label>
+                                             <input type="email" class="form-control" id="memberEmail"
+                                                 placeholder="Email Address" required>
+                                         </div>
+                                         <div class="mb-3">
+                                             <label for="memberPhone" class="form-label">Phone</label>
+                                             <input type="tel" class="form-control" id="memberPhone"
+                                                 placeholder="Phone Number" required>
+                                         </div>
+                                         <div class="mb-3">
+                                             <label for="memberIdNo" class="form-label">ID Number</label>
+                                             <input type="text" class="form-control" id="memberIdNo"
+                                                 placeholder="Auto-generated" readonly>
+                                         </div>
+                                         <button type="submit" class="btn btn-primary w-100">Register Member</button>
+                                     </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-8">
+                            <div class="d-flex justify-content-between align-items-center mb-3 gap-2 flex-wrap">
+                                <h5 class="mb-0">Registered Members</h5>
+                                <div class="input-group" style="max-width: 250px;">
+                                    <span class="input-group-text bg-white border-end-0">
+                                        <i class="ri-search-line"></i>
+                                    </span>
+                                    <input type="text" id="memberSearch" class="form-control border-start-0"
+                                        placeholder="Search members...">
+                                </div>
+                                <div class="btn-group view-toggle" role="group">
+                                    <button type="button" class="btn btn-sm view-btn active" id="cardViewBtn"
+                                        data-view="card" title="Card View">
+                                        <i class="ri-grid-line"></i> Card View
+                                    </button>
+                                    <button type="button" class="btn btn-sm view-btn" id="tableViewBtn"
+                                        data-view="table" title="Table View">
+                                        <i class="ri-table-2"></i> Table View
+                                    </button>
+                                </div>
+                            </div>
+                            <div id="membersList" class="row g-3">
+                                <div class="col-12">
+                                    <p class="text-muted text-center">No members registered yet</p>
+                                </div>
+                            </div>
+                            <div id="membersPagination"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Loans Page -->
+                <section id="loans" class="page">
+                    <h2 class="mb-4">Loans Management</h2>
+
+                    <div class="row">
+                        <div class="col-lg-4 mb-4">
+                            <div class="card shadow-sm">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Create New Loan</h5>
+                                </div>
+                                <div class="card-body">
+                                    <form id="loanForm">
+                                         <div class="mb-3">
+                                             <label for="loanMember" class="form-label"><i class="ri-user-search-line" style="margin-right: 0.4rem;"></i>Member</label>
+                                             <div class="input-group">
+                                                 <span class="input-group-text bg-white border-end-0">
+                                                     <i class="ri-search-line"></i>
+                                                 </span>
+                                                 <select class="form-select border-start-0" id="loanMember" required>
+                                                     <option value="">Select Member</option>
+                                                 </select>
+                                             </div>
+                                         </div>
+                                        <div class="mb-3">
+                                            <label for="loanAmount" class="form-label">Amount (UGX)</label>
+                                            <input type="number" class="form-control" id="loanAmount"
+                                                placeholder="Loan Amount" min="1" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="loanTerm" class="form-label">Term (months)</label>
+                                            <input type="number" class="form-control" id="loanTerm"
+                                                placeholder="Loan Term" min="1" max="60" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="interestRate" class="form-label">Interest Rate (%)</label>
+                                            <input type="number" class="form-control" id="interestRate"
+                                                placeholder="Interest Rate" min="0" max="100" step="0.1" value="2">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="loanDate" class="form-label">Loan Date</label>
+                                            <input type="date" class="form-control" id="loanDate" required>
+                                        </div>
+                                        <div class="mb-3 p-3 bg-light rounded">
+                                            <label class="form-label mb-2">📊 Monthly Installment</label>
+                                            <p class="mb-0" id="monthlyInstallment"
+                                                style="font-size: 1.3rem; font-weight: 600; color: #2563eb;">UGX 0</p>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary w-100">Create Loan</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-8">
+                            <div class="card shadow-sm">
+                                <div
+                                    class="card-header bg-white border-bottom d-flex justify-content-between align-items-center">
+                                    <h5 class="mb-0">Loan Records</h5>
+                                    <div class="input-group" style="max-width: 200px;">
+                                        <span class="input-group-text bg-white border-end-0">
+                                            <i class="ri-search-line"></i>
+                                        </span>
+                                        <input type="text" id="loanSearch" class="form-control border-start-0"
+                                            placeholder="Search loans...">
+                                    </div>
+                                </div>
+                                <div class="card-body p-0">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover mb-0">
+                                            <thead >
+                                                <tr>
+                                                    <th>Member</th>
+                                                    <th>Amount</th>
+                                                    <th>Monthly Payment</th>
+                                                    <th>Due Date</th>
+                                                    <th>Status</th>
+                                                    <th>Remaining</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="loansTableBody">
+                                                <tr>
+                                                    <td colspan="7" class="text-center text-muted py-4">No loans created
+                                                        yet</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div id="loansPagination"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Payments Page -->
+                <section id="payments" class="page">
+                    <h2 class="mb-4">Payment Management</h2>
+
+                    <div class="row">
+                        <div class="col-lg-4 mb-4">
+                            <div class="card shadow-sm">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Record Payment</h5>
+                                </div>
+                                <div class="card-body">
+                                    <form id="paymentForm">
+                                         <div class="mb-3">
+                                             <label for="paymentLoan" class="form-label"><i class="ri-file-search-line" style="margin-right: 0.4rem;"></i>Select Loan</label>
+                                             <div class="input-group">
+                                                 <span class="input-group-text bg-white border-end-0">
+                                                     <i class="ri-search-line"></i>
+                                                 </span>
+                                                 <select class="form-select border-start-0" id="paymentLoan" required>
+                                                     <option value="">Select Loan</option>
+                                                 </select>
+                                             </div>
+                                         </div>
+                                        <div class="mb-3">
+                                            <label for="paymentAmount" class="form-label">Amount (UGX)</label>
+                                            <input type="number" class="form-control" id="paymentAmount"
+                                                placeholder="Payment Amount" min="1" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="paymentDate" class="form-label">Payment Date</label>
+                                            <input type="date" class="form-control" id="paymentDate" required>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary w-100">Record Payment</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-8">
+                            <div class="card shadow-sm">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Payment History</h5>
+                                </div>
+                                <div class="card-body p-0">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover mb-0">
+                                            <thead >
+                                                <tr>
+                                                    <th>Member</th>
+                                                    <th>Amount</th>
+                                                    <th>Date</th>
+                                                    <th>Loan Details</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="paymentsTableBody">
+                                                <tr>
+                                                    <td colspan="4" class="text-center text-muted py-4">No payments
+                                                        recorded yet</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div id="paymentsPagination"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Reports Page -->
+                <section id="reports" class="page">
+                    <h2 class="mb-4">Reports & Analytics</h2>
+
+                    <div class="row g-3 mb-4">
+                        <div class="col-lg-6">
+                            <div class="card shadow-sm">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Member Details</h5>
+                                </div>
+                                <div class="card-body">
+                                    <label for="reportMember" class="form-label"><i class="ri-user-search-line" style="margin-right: 0.4rem;"></i>Select Member</label>
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text bg-white border-end-0">
+                                            <i class="ri-search-line"></i>
+                                        </span>
+                                        <select class="form-select border-start-0" id="reportMember">
+                                            <option value="">Select Member</option>
+                                        </select>
+                                    </div>
+                                    <div id="memberReport" class="text-muted text-center py-4">
+                                        Select a member to view details
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="card shadow-sm">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Loan Summary</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div id="loanReport" class="text-muted text-center py-4">
+                                        No loans to display
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card shadow-sm">
+                        <div class="card-header">
+                            <h5 class="mb-0">Member Ranking (By Outstanding Balance)</h5>
+                        </div>
+                        <div class="card-body p-0">
+                            <div id="rankingReport" class="text-muted text-center py-4">
+                                No data available
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Profits Section -->
+                    <div class="row g-3 mt-4">
+                        <div class="col-lg-6">
+                            <div class="card shadow-sm">
+                                <div class="card-header">
+                                    <h5 class="mb-0">💰 Total Profits Summary</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div id="profitsSummary" class="text-muted text-center py-4">
+                                        No loans to display
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="card shadow-sm">
+                                <div class="card-header">
+                                    <h5 class="mb-0">📊 Profit Distribution by Member</h5>
+                                </div>
+                                <div class="card-body" style="padding: 2rem;">
+                                    <div id="profitDoughnutChart" style="width: 100%; height: 350px;"></div>
+                                    <div id="profitDistribution" class="text-muted text-center py-4">
+                                        No data available
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Member Contributions to Profits -->
+                    <div class="card border-0 shadow-sm mt-4">
+                        <div class="card-header">
+                            <h5 class="mb-0">Member Contributions to Profits</h5>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-hover mb-0">
+                                    <thead >
+                                        <tr>
+                                             <th>Member Name</th>
+                                             <th>Loans Count</th>
+                                             <th>Total Interest Generated</th>
+                                             <th>% Share of Total Profits</th>
+                                         </tr>
+                                     </thead>
+                                     <tbody id="memberProfitsTableBody">
+                                         <tr>
+                                             <td colspan="4" class="text-center text-muted py-4">No loans to display</td>
+                                         </tr>
+                                     </tbody>
+                                 </table>
+                             </div>
+                         </div>
+                     </div>
+
+                    <!-- Analytics Charts Grid -->
+                    <div class="row g-4 mt-4 mb-4">
+                        <!-- Savings Trend Chart (Full Width) -->
+                        <div class="col-12">
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+                                    <h5 class="mb-0">📈 Savings Growth Trend</h5>
+                                    <div class="d-flex gap-2 flex-wrap" style="align-items: center;">
+                                        <input type="date" id="savingsTrendStartDate" class="form-control form-control-sm" style="max-width: 150px;" placeholder="Start Date">
+                                        <input type="date" id="savingsTrendEndDate" class="form-control form-control-sm" style="max-width: 150px;" placeholder="End Date">
+                                        <button class="btn btn-sm btn-outline-primary" id="exportSavingsTrendBtn" title="Export as PNG">
+                                            <i class="ri-download-line"></i> Export
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="card-body" style="padding: 2rem;">
+                                    <div id="savingsTrendChart" style="width: 100%; height: 350px;"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Top Members & Financial Summary (2 columns) -->
+                        <div class="col-lg-6">
+                            <div class="card border-0 shadow-sm h-100">
+                                <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+                                    <h5 class="mb-0">📊 Top Members by Savings</h5>
+                                    <div class="d-flex gap-2 flex-wrap" style="align-items: center;">
+                                        <input type="date" id="topMembersStartDate" class="form-control form-control-sm" style="max-width: 130px;" placeholder="Start">
+                                        <input type="date" id="topMembersEndDate" class="form-control form-control-sm" style="max-width: 130px;" placeholder="End">
+                                        <button class="btn btn-sm btn-outline-primary" id="exportTopMembersBtn" title="Export as PNG">
+                                            <i class="ri-download-line"></i> Export
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="card-body" style="padding: 2rem;">
+                                    <div id="topMembersBarChart" style="width: 100%; height: 320px;"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="card border-0 shadow-sm h-100">
+                                <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+                                    <h5 class="mb-0">💰 Financial Summary Waterfall</h5>
+                                    <button class="btn btn-sm btn-outline-primary" id="exportWaterfallBtn" title="Export as PNG">
+                                        <i class="ri-download-line"></i> Export
+                                    </button>
+                                </div>
+                                <div class="card-body" style="padding: 2rem;">
+                                    <div id="financialWaterfallChart" style="width: 100%; height: 320px;"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Period Comparison & Repayment Metrics (2 columns) -->
+                        <div class="col-lg-6">
+                            <div class="card border-0 shadow-sm h-100">
+                                <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+                                    <h5 class="mb-0">📊 Period Comparison Analysis</h5>
+                                    <div class="d-flex gap-2 flex-wrap" style="align-items: center;">
+                                        <select class="form-select form-select-sm" id="comparisonPeriodSelect" style="max-width: 150px;">
+                                            <option value="monthly">Month-over-Month</option>
+                                            <option value="yearly">Year-over-Year</option>
+                                        </select>
+                                        <button class="btn btn-sm btn-outline-primary" id="exportComparisonBtn" title="Export as PNG">
+                                            <i class="ri-download-line"></i> Export
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="card-body" style="padding: 2rem;">
+                                    <div id="comparisonChart" style="width: 100%; height: 320px;"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="card border-0 shadow-sm h-100">
+                                <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+                                    <h5 class="mb-0">💳 Loan Repayment Breakdown</h5>
+                                    <button class="btn btn-sm btn-outline-primary" id="exportRepaymentBtn" title="Export as PNG">
+                                        <i class="ri-download-line"></i> Export
+                                    </button>
+                                </div>
+                                <div class="card-body" style="padding: 2rem;">
+                                    <div id="repaymentMetricsChart" style="width: 100%; height: 320px;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Export All Charts as PDF -->
+                    <div class="card border-0 shadow-sm mt-4 mb-4">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">📋 Export All Analytics</h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="text-muted mb-3">Generate a comprehensive PDF report containing all charts and analysis</p>
+                            <button class="btn btn-lg btn-primary" id="exportAllPdfBtn">
+                                <i class="ri-file-pdf-line"></i> Export Complete PDF Report
+                            </button>
+                        </div>
+                    </div>
+                    </section>
+
+                <!-- Transactions Page -->
+                <section id="transactions" class="page">
+                    <h2 class="mb-4">Member Transaction History</h2>
+
+                    <div class="row mb-4">
+                        <div class="col-lg-3">
+                             <div class="card shadow-sm">
+                                 <div class="card-header">
+                                     <h5 class="mb-0"><i class="ri-user-search-line" style="margin-right: 0.4rem;"></i>Select Member</h5>
+                                 </div>
+                                 <div class="card-body">
+                                     <div class="input-group">
+                                         <span class="input-group-text bg-white border-end-0">
+                                             <i class="ri-search-line"></i>
+                                         </span>
+                                         <select class="form-select border-start-0" id="transactionMemberSelect" required>
+                                             <option value="">Choose a member...</option>
+                                         </select>
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>
+
+                        <div class="col-lg-9">
+                            <div class="card shadow-sm">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Transaction Summary</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row g-3" id="transactionSummary">
+                                        <div class="col-md-4">
+                                            <p class="text-muted small mb-1">Total Transactions</p>
+                                            <p class="h5 mb-0" id="totalTransactionCount">0</p>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <p class="text-muted small mb-1">Total In</p>
+                                            <p class="h5 mb-0" id="totalInAmount">UGX 0</p>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <p class="text-muted small mb-1">Total Out</p>
+                                            <p class="h5 mb-0" id="totalOutAmount">UGX 0</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- All Transactions Table -->
+                    <div class="card shadow-sm">
+                        <div
+                            class="card-header bg-white border-bottom d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">All Transactions</h5>
+                            <button class="btn btn-sm btn-primary" id="exportTransactionsBtn">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width: 0.9rem; height: 0.9rem; margin-right: 0.4rem; vertical-align: -2px;">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/><path d="M14 2v6h6"/><path d="M12 15v3m0-7v3"/>
+                                </svg>
+                                Export
+                            </button>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-hover mb-0">
+                                    <thead >
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Type</th>
+                                            <th>Amount</th>
+                                            <th>Status</th>
+                                            <th>Details</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="transactionsTableBody">
+                                        <tr>
+                                            <td colspan="5" class="text-center text-muted py-4">Select a member to view
+                                                transactions</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div id="transactionsPagination"></div>
+                        </div>
+                    </div>
+
+                    <!-- Loans Details -->
+                    <div class="card border-0 shadow-sm mt-4">
+                        <div class="card-header">
+                            <h5 class="mb-0">Loan Details</h5>
+                        </div>
+                        <div class="card-body p-0">
+                             <div class="table-responsive">
+                                 <table class="table table-hover table-sm mb-0">
+                                     <thead >
+                                         <tr>
+                                             <th>Loan ID</th>
+                                             <th>Amount</th>
+                                             <th>Term</th>
+                                             <th>Interest Rate</th>
+                                             <th>Loan Date</th>
+                                             <th>Due Date</th>
+                                             <th>Status</th>
+                                             <th class="d-none d-md-table-cell">Payment Progress</th>
+                                             <th>Remaining</th>
+                                         </tr>
+                                     </thead>
+                                    <tbody id="memberLoansDetailsBody">
+                                        <tr>
+                                            <td colspan="9" class="text-center text-muted py-4">No loans to display</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div id="loanDetailsPagination"></div>
+                        </div>
+                    </div>
+
+                    <!-- Savings Details -->
+                    <div class="card border-0 shadow-sm mt-4">
+                        <div class="card-header">
+                            <h5 class="mb-0">Savings Details</h5>
+                        </div>
+                        <div class="card-body p-0">
+                            <div id="memberSavingsDetails" class="text-muted text-center py-4">
+                                No savings to display
+                            </div>
+                            <div id="savingsDetailsPagination"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Savings Page -->
+                <section id="savings" class="page">
+                    <h2 class="mb-4">Member Savings</h2>
+
+                    <!-- Add Savings & Withdrawal Forms -->
+                    <div class="row mb-4">
+                        <div class="col-lg-4 mb-4">
+                            <div class="card shadow-sm">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Record Saving</h5>
+                                </div>
+                                <div class="card-body">
+                                    <form id="savingForm">
+                                         <div class="mb-3">
+                                             <label for="savingMember" class="form-label"><i class="ri-user-search-line" style="margin-right: 0.4rem;"></i>Member</label>
+                                             <div class="input-group">
+                                                 <span class="input-group-text bg-white border-end-0">
+                                                     <i class="ri-search-line"></i>
+                                                 </span>
+                                                 <select class="form-select border-start-0" id="savingMember" required>
+                                                     <option value="">Select Member</option>
+                                                 </select>
+                                             </div>
+                                         </div>
+                                        <div class="mb-3">
+                                            <label for="savingAmount" class="form-label">Amount (UGX)</label>
+                                            <input type="number" class="form-control" id="savingAmount"
+                                                placeholder="Savings Amount" min="1" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="savingDate" class="form-label">Saving Date</label>
+                                            <input type="date" class="form-control" id="savingDate" required>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary w-100">Record Saving</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 mb-4">
+                            <div class="card shadow-sm">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Withdrawal Request</h5>
+                                </div>
+                                <div class="card-body">
+                                    <form id="withdrawalForm">
+                                         <div class="mb-3">
+                                             <label for="withdrawalMember" class="form-label"><i class="ri-user-search-line" style="margin-right: 0.4rem;"></i>Member</label>
+                                             <div class="input-group">
+                                                 <span class="input-group-text bg-white border-end-0">
+                                                     <i class="ri-search-line"></i>
+                                                 </span>
+                                                 <select class="form-select border-start-0" id="withdrawalMember" required>
+                                                     <option value="">Select Member</option>
+                                                 </select>
+                                             </div>
+                                         </div>
+                                        <div class="mb-3">
+                                            <label for="withdrawalAmount" class="form-label">Amount (UGX)</label>
+                                            <input type="number" class="form-control" id="withdrawalAmount"
+                                                placeholder="Withdrawal Amount" min="1" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="withdrawalDate" class="form-label">Withdrawal Date</label>
+                                            <input type="date" class="form-control" id="withdrawalDate" required>
+                                        </div>
+                                        <button type="submit" class="btn btn-warning w-100">Record Withdrawal</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Overall Savings Stats (moved here) -->
+                        <div class="col-lg-8">
+                            <div class="card border-0 shadow-sm savings-card">
+                                <div class="card-body p-4" style="position: relative; z-index: 1;">
+                                    <div class="row align-items-center">
+                                        <div class="col-md-6 mb-4 mb-md-0">
+                                            <p class="savings-label mb-2" style="white-space: nowrap;">💰 Total Collective Savings</p>
+                                            <p class="savings-amount mb-0" id="totalSavings" style="white-space: nowrap;">UGX 0</p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="savings-grid">
+                                                <div class="savings-stat">
+                                                    <p class="savings-stat-label">Active Savers</p>
+                                                    <p class="savings-stat-value" id="activeSavers">0</p>
+                                                </div>
+                                                <div class="savings-stat">
+                                                    <p class="savings-stat-label">Avg. Savings</p>
+                                                    <p class="savings-stat-value" id="avgSavings">UGX 0</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Savings by Member -->
+                    <div class="card shadow-sm">
+                        <div class="card-header">
+                            <h5 class="mb-0">Savings by Member</h5>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-hover mb-0 savings-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Member Name</th>
+                                            <th>Total Savings</th>
+                                            <th>Contributions Count</th>
+                                            <th>Last Contribution</th>
+                                            <th>Avg. Contribution</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="savingsTableBody">
+                                        <tr>
+                                            <td colspan="5" class="text-center text-muted py-4">No savings data
+                                                available</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div id="savingsPagination"></div>
+                        </div>
+                    </div>
+
+                    <!-- Savings Growth Chart -->
+                    <div class="card border-0 shadow-sm mt-4">
+                        <div class="card-header">
+                            <h5 class="mb-0">Savings Distribution</h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="savingsDistribution" class="text-muted text-center py-4">
+                                No data available
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="text-white text-center py-4 mt-auto"
+            style="background: linear-gradient(135deg, #0f172a, #1e293b); border-top: 1px solid rgba(255, 255, 255, 0.1);">
+            <div class="container-fluid">
+                <p class="mb-0 small" style="font-size: 0.9rem;">
+                    &copy; 2025 <strong>The Four</strong>. All data stored locally in your browser.
+                </p>
+            </div>
+        </footer>
+
+        <!-- Features Sidebar Panel -->
+        <div id="featuresSidebar" class="features-sidebar">
+            <div class="sidebar-header">
+                <h5 class="mb-0">Settings & Features</h5>
+                <button class="btn-close-sidebar" id="closeSidebarBtn" title="Close">×</button>
+            </div>
+
+            <div class="sidebar-content">
+                <!-- Data Management Section -->
+                <div class="feature-section">
+                    <h6 class="feature-title">💾 Data Management</h6>
+                    <p class="feature-desc">Backup, restore, and manage your data</p>
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <button class="btn btn-sm btn-primary w-100" id="exportBtn">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width: 0.9rem; height: 0.9rem; margin-right: 0.4rem; vertical-align: -2px;">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/><path d="M14 2v6h6"/><path d="M12 15v3m0-7v3"/>
+                                </svg>
+                                Export
+                            </button>
+                        </div>
+                        <div class="col-6">
+                            <button class="btn btn-sm btn-info w-100" id="backupBtn">💾 Backup</button>
+                        </div>
+                        <div class="col-6">
+                            <button class="btn btn-sm btn-success w-100" id="restoreBtn"
+                                onclick="document.getElementById('restoreInput').click()">🔄 Restore</button>
+                        </div>
+                        <input type="file" id="restoreInput" accept=".json" style="display: none;">
+                    </div>
+                </div>
+
+                <!-- Audit & Admin Section -->
+                <div class="feature-section">
+                    <h6 class="feature-title">📋 Audit & Admin</h6>
+                    <p class="feature-desc">View audit logs and system administration</p>
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <button class="btn btn-sm btn-secondary w-100" id="auditBtn">📋 Audit Log</button>
+                        </div>
+                        <div class="col-6">
+                            <button class="btn btn-sm btn-danger w-100" id="resetBtn">⚠️ Reset</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- QR Code Section -->
+                <div class="feature-section">
+                    <h6 class="feature-title">🔄 QR Code Verification</h6>
+                    <p class="feature-desc">Generate QR codes with member details for quick verification</p>
+                    <button class="btn btn-sm btn-primary w-100" id="generateQRBtn">Generate QR Code</button>
+                    <div id="qrPreview" class="qr-preview mt-2" style="display:none;"></div>
+                </div>
+
+                <!-- Mobile Optimization Section -->
+                <div class="feature-section">
+                    <h6 class="feature-title"><i class="ri-smartphone-line"></i> Mobile Optimization</h6>
+                    <p class="feature-desc">Optimize display and layout for your device</p>
+                    
+                    <!-- Toggle Options Container -->
+                    <div class="mobile-options-container">
+                        <!-- Option 1: Mobile Optimization -->
+                        <div class="mobile-toggle-card">
+                            <div class="toggle-left">
+                                <label for="mobileOptimizeToggle" class="toggle-label">
+                                    <i class="ri-smartphone-line"></i> Enable Mobile Optimization
+                                </label>
+                                <p class="toggle-hint">Responsive design for your screen</p>
+                            </div>
+                            <div class="toggle-right">
+                                <input class="form-check-input toggle-checkbox" type="checkbox" id="mobileOptimizeToggle" checked>
+                            </div>
+                        </div>
+
+                        <!-- Option 2: Compact View -->
+                        <div class="mobile-toggle-card">
+                            <div class="toggle-left">
+                                <label for="compactViewToggle" class="toggle-label">
+                                    <i class="ri-layout-line"></i> Use Compact View
+                                </label>
+                                <p class="toggle-hint">Space-saving layout for better use</p>
+                            </div>
+                            <div class="toggle-right">
+                                <input class="form-check-input toggle-checkbox" type="checkbox" id="compactViewToggle" checked>
+                            </div>
+                        </div>
+
+                        <!-- Option 3: Font Size -->
+                        <div class="mobile-toggle-card font-size-card">
+                            <div class="toggle-left">
+                                <label class="toggle-label">
+                                    <i class="ri-text-size"></i> Font Size
+                                </label>
+                                <p class="toggle-hint">Adjust text size for readability</p>
+                            </div>
+                            <div class="font-size-control">
+                                <input type="range" class="form-range" id="fontSizeSlider" min="12" max="18" value="14">
+                                <span class="font-size-badge"><span id="fontSizeValue">14</span>px</span>
+                            </div>
+                        </div>
+
+                        <!-- Option 4: Dark Mode -->
+                        <div class="mobile-toggle-card">
+                            <div class="toggle-left">
+                                <label for="darkModeToggle" class="toggle-label">
+                                    <i class="ri-moon-line"></i> Dark Mode
+                                </label>
+                                <p class="toggle-hint">Easy on the eyes in low light</p>
+                            </div>
+                            <div class="toggle-right">
+                                <input class="form-check-input toggle-checkbox" type="checkbox" id="darkModeToggle">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Digital Signature Section -->
+                <div class="feature-section">
+                    <h6 class="feature-title">🔐 Digital Signatures</h6>
+                    <p class="feature-desc">Receipts include unique digital signatures</p>
+                    <button class="btn btn-sm btn-secondary w-100" id="signatureInfoBtn">View Sample</button>
+                </div>
+
+                <!-- Additional Features -->
+                <div class="feature-section">
+                    <h6 class="feature-title">📧 Email Integration</h6>
+                    <p class="feature-desc">Send receipts via email</p>
+                    <input type="email" class="form-control form-control-sm mb-2" id="emailInput"
+                        placeholder="Enter email">
+                    <button class="btn btn-sm btn-warning w-100" id="emailReceiptBtn" disabled>Send Receipt</button>
+                </div>
+
+                <!-- Language Selection -->
+                <div class="feature-section">
+                    <h6 class="feature-title">🌐 Language Support</h6>
+                    <p class="feature-desc">Choose receipt language</p>
+                    <select class="form-select form-select-sm" id="languageSelect">
+                        <option value="en">English</option>
+                        <option value="sw">Swahili</option>
+                        <option value="lg">Luganda</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Photo Preview Modal -->
+        <div class="modal fade" id="photoPreviewModal" tabindex="-1" aria-labelledby="photoPreviewLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header border-0">
+                        <h5 class="modal-title" id="photoPreviewLabel">Member Photo</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-center" style="padding: 2rem 1.5rem;">
+                        <img id="modalPhotoPreview" src="" alt="Member Photo" style="max-width: 100%; max-height: 400px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+                    </div>
+                    <div class="modal-footer border-0">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-danger" id="deletePhotoBtn" onclick="App.removeMemberPhoto()">
+                            <i class="ri-delete-bin-line"></i> Delete Photo
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar Toggle Button (FAB) -->
+        <button id="toggleSidebarBtn" class="sidebar-toggle-btn" title="Open Settings">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width: 1.5rem; height: 1.5rem;">
+                <path d="M6.17071 18C6.58254 16.8348 7.69378 16 9 16C10.3062 16 11.4175 16.8348 11.8293 18H22V20H11.8293C11.4175 21.1652 10.3062 22 9 22C7.69378 22 6.58254 21.1652 6.17071 20H2V18H6.17071ZM12.1707 11C12.5825 9.83481 13.6938 9 15 9C16.3062 9 17.4175 9.83481 17.8293 11H22V13H17.8293C17.4175 14.1652 16.3062 15 15 15C13.6938 15 12.5825 14.1652 12.1707 13H2V11H12.1707ZM6.17071 4C6.58254 2.83481 7.69378 2 9 2C10.3062 2 11.4175 2.83481 11.8293 4H22V6H11.8293C11.4175 7.16519 10.3062 8 9 8C7.69378 8 6.58254 7.16519 6.17071 6H2V4H6.17071ZM9 6C9.55228 6 10 5.55228 10 5C10 4.44772 9.55228 4 9 4C8.44772 4 8 4.44772 8 5C8 5.55228 8.44772 6 9 6ZM15 13C15.5523 13 16 12.5523 16 12C16 11.4477 15.5523 11 15 11C14.4477 11 14 11.4477 14 12C14 12.5523 14.4477 13 15 13ZM9 20C9.55228 20 10 19.5523 10 19C10 18.4477 9.55228 18 9 18C8.44772 18 8 18.4477 8 19C8 19.5523 8.44772 20 9 20Z"></path>
+            </svg>
+        </button>
+    </div>
+
+    <!-- jsPDF Local -->
+    <script src="vendor/jsPDF/jspdf.umd.js"></script>
+    <script src="vendor/jsPDF/jspdf.plugin.autotable.min.js"></script>
+
+    <!-- SheetJS Local -->
+    <script src="vendor/sheetjs/xlsx.full.min.js"></script>
+
+    <!-- QR Code Library Local -->
+    <script src="vendor/qrcodejs/qrcodejs.min.js"></script>
+
+    <!-- ECharts for Doughnut Charts -->
+    <script src="vendor/echarts/dist/echarts.min.js"></script>
+
+    <!-- Bootstrap JS (Local) -->
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- SweetAlert2 JS (Local) -->
+    <script src="vendor/sweetalert/dist/sweetalert2.all.min.js"></script>
+
+    <!-- Choices.js JS (Local) -->
+    <script src="vendor/Choices/public/assets/scripts/choices.min.js"></script>
+
+    <!-- Custom Scripts -->
+    <script src="js/sweetalert-integration.js"></script>
+    <script src="js/offline-resources.js"></script>
+    <script src="js/custom-notifications.js"></script>
+    <script src="js/offline-pdf-generator.js"></script>
+    <script src="js/loan-member-fix.js"></script>
+    <script src="js/offline-excel-generator.js"></script>
+    <script src="js/jspdf-loader.js"></script>
+    <script src="js/device-support.js"></script>
+    <script src="js/indexeddb.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/analytics.js"></script>
+    <script src="js/excel-styling.js"></script>
+    <script src="js/export.js"></script>
+    <script src="js/receipts.js"></script>
+    <script src="js/sidebar-features.js"></script>
+    <script src="js/transactions.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/notifications.js"></script>
+    <script src="js/pwa-checker.js"></script>
+    <script src="js/pwa-install.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/profit-chart.js"></script>
+    <!-- Load advanced-charts.js AFTER indexeddb.js to ensure IndexedDBManager is available -->
+    <script src="js/advanced-charts.js"></script>
+    <!-- Choices.js Initialization -->
+    <script src="js/choices-init.js"></script>
+
+    <!-- Service Worker Registration -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/service-worker.js')
+            .then(registration => {
+              console.log('Service Worker registered successfully:', registration);
+            })
+            .catch(error => {
+              console.error('Service Worker registration failed:', error);
+            });
+        });
+      }
+    </script>
+
+    <!-- Splash Screen Handler -->
+    <script>
+      function hideSplashScreen() {
+        const splashScreen = document.getElementById('splashScreen');
+        if (splashScreen) {
+          splashScreen.classList.add('hidden');
+          // Remove after transition completes
+          setTimeout(() => {
+            splashScreen.style.display = 'none';
+          }, 500);
+        }
+      }
+
+      // Hide splash screen when DOM is fully loaded
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', hideSplashScreen);
+      } else {
+        hideSplashScreen();
+      }
+
+      // Fallback: hide splash screen after 3 seconds max
+      setTimeout(hideSplashScreen, 3000);
+    </script>
+</body>
+
+</html>

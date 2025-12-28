@@ -1,0 +1,140 @@
+/**
+ * Offline Icons Fallback
+ * Provides icon symbols when Bootstrap Icons CDN is unavailable
+ * Uses Unicode symbols and CSS to create icon-like appearances
+ */
+
+/* Unicode-based icon replacements for offline mode */
+.bi::before {
+    content: '●'; /* Fallback circle for unknown icons */
+    margin-right: 0.3rem;
+    font-weight: bold;
+    display: inline-block;
+    min-width: 1em;
+    text-align: center;
+}
+
+/* Specific icons using Unicode symbols */
+.bi-download::before { content: '⬇️'; display: inline-block; margin-right: 0.3rem; }
+.bi-cloud-download::before { content: '☁️'; display: inline-block; margin-right: 0.3rem; }
+.bi-gear-fill::before { content: '⚙️'; display: inline-block; margin-right: 0.3rem; }
+.bi-search::before { content: '🔍'; display: inline-block; margin-right: 0.3rem; }
+.bi-grid-3x2-gap::before { content: '⊞'; display: inline-block; margin-right: 0.3rem; }
+.bi-table::before { content: '▦'; display: inline-block; margin-right: 0.3rem; }
+.bi-trash::before { content: '🗑️'; display: inline-block; margin-right: 0.3rem; }
+.bi-pencil::before { content: '✏️'; display: inline-block; margin-right: 0.3rem; }
+.bi-eye::before { content: '👁️'; display: inline-block; margin-right: 0.3rem; }
+.bi-play-fill::before { content: '▶️'; display: inline-block; margin-right: 0.3rem; }
+.bi-pause-fill::before { content: '⏸️'; display: inline-block; margin-right: 0.3rem; }
+.bi-plus::before { content: '➕'; display: inline-block; margin-right: 0.3rem; }
+.bi-x::before { content: '✖️'; display: inline-block; margin-right: 0.3rem; }
+.bi-check::before { content: '✔️'; display: inline-block; margin-right: 0.3rem; }
+.bi-arrow-right::before { content: '→'; display: inline-block; margin-right: 0.3rem; }
+.bi-arrow-left::before { content: '←'; display: inline-block; margin-right: 0.3rem; }
+.bi-arrow-up::before { content: '↑'; display: inline-block; margin-right: 0.3rem; }
+.bi-arrow-down::before { content: '↓'; display: inline-block; margin-right: 0.3rem; }
+.bi-arrow-down-circle::before { content: '⬇️'; display: inline-block; margin-right: 0.3rem; }
+.bi-arrow-down-circle-fill::before { content: '⬇️'; display: inline-block; margin-right: 0.3rem; }
+.bi-arrow-repeat::before { content: '🔄'; display: inline-block; margin-right: 0.3rem; }
+.bi-chevron-right::before { content: '❯'; display: inline-block; margin-right: 0.3rem; }
+.bi-chevron-left::before { content: '❮'; display: inline-block; margin-right: 0.3rem; }
+.bi-chevron-down::before { content: '❱'; display: inline-block; margin-right: 0.3rem; }
+.bi-bell::before { content: '🔔'; display: inline-block; margin-right: 0.3rem; }
+.bi-envelope::before { content: '✉️'; display: inline-block; margin-right: 0.3rem; }
+.bi-telephone::before { content: '☎️'; display: inline-block; margin-right: 0.3rem; }
+.bi-calendar::before { content: '📅'; display: inline-block; margin-right: 0.3rem; }
+.bi-clock::before { content: '🕐'; display: inline-block; margin-right: 0.3rem; }
+.bi-file::before { content: '📄'; display: inline-block; margin-right: 0.3rem; }
+.bi-folder::before { content: '📁'; display: inline-block; margin-right: 0.3rem; }
+.bi-image::before { content: '🖼️'; display: inline-block; margin-right: 0.3rem; }
+.bi-camera::before { content: '📷'; display: inline-block; margin-right: 0.3rem; }
+.bi-printer::before { content: '🖨️'; display: inline-block; margin-right: 0.3rem; }
+.bi-link::before { content: '🔗'; display: inline-block; margin-right: 0.3rem; }
+.bi-lock::before { content: '🔒'; display: inline-block; margin-right: 0.3rem; }
+.bi-unlock::before { content: '🔓'; display: inline-block; margin-right: 0.3rem; }
+.bi-shield::before { content: '🛡️'; display: inline-block; margin-right: 0.3rem; }
+.bi-alert::before { content: '⚠️'; display: inline-block; margin-right: 0.3rem; }
+.bi-info-circle::before { content: 'ℹ️'; display: inline-block; margin-right: 0.3rem; }
+.bi-question-circle::before { content: '❓'; display: inline-block; margin-right: 0.3rem; }
+.bi-heart::before { content: '❤️'; display: inline-block; margin-right: 0.3rem; }
+.bi-star::before { content: '⭐'; display: inline-block; margin-right: 0.3rem; }
+.bi-check-circle::before { content: '✅'; display: inline-block; margin-right: 0.3rem; }
+.bi-x-circle::before { content: '❌'; display: inline-block; margin-right: 0.3rem; }
+.bi-exclamation-circle::before { content: '⛔'; display: inline-block; margin-right: 0.3rem; }
+.bi-menu::before { content: '☰'; display: inline-block; margin-right: 0.3rem; }
+.bi-three-dots::before { content: '⋯'; display: inline-block; margin-right: 0.3rem; }
+.bi-dots-vertical::before { content: '⋮'; display: inline-block; margin-right: 0.3rem; }
+.bi-filter::before { content: '⚙️'; display: inline-block; margin-right: 0.3rem; }
+.bi-sort::before { content: '↕️'; display: inline-block; margin-right: 0.3rem; }
+.bi-columns::before { content: '▦'; display: inline-block; margin-right: 0.3rem; }
+.bi-list::before { content: '☰'; display: inline-block; margin-right: 0.3rem; }
+.bi-eye-slash::before { content: '👁️'; display: inline-block; margin-right: 0.3rem; }
+.bi-share::before { content: '📤'; display: inline-block; margin-right: 0.3rem; }
+.bi-reply::before { content: '↩️'; display: inline-block; margin-right: 0.3rem; }
+.bi-copy::before { content: '📋'; display: inline-block; margin-right: 0.3rem; }
+.bi-save::before { content: '💾'; display: inline-block; margin-right: 0.3rem; }
+.bi-undo::before { content: '↶'; display: inline-block; margin-right: 0.3rem; }
+.bi-redo::before { content: '↷'; display: inline-block; margin-right: 0.3rem; }
+.bi-refresh::before { content: '🔄'; display: inline-block; margin-right: 0.3rem; }
+.bi-close::before { content: '✕'; display: inline-block; margin-right: 0.3rem; }
+.bi-ban::before { content: '🚫'; display: inline-block; margin-right: 0.3rem; }
+.bi-power::before { content: '⏻'; display: inline-block; margin-right: 0.3rem; }
+.bi-building::before { content: '🏢'; display: inline-block; margin-right: 0.3rem; }
+.bi-person::before { content: '👤'; display: inline-block; margin-right: 0.3rem; }
+.bi-people::before { content: '👥'; display: inline-block; margin-right: 0.3rem; }
+.bi-graph-up::before { content: '📈'; display: inline-block; margin-right: 0.3rem; }
+.bi-graph-down::before { content: '📉'; display: inline-block; margin-right: 0.3rem; }
+.bi-chart-bar::before { content: '📊'; display: inline-block; margin-right: 0.3rem; }
+.bi-currency::before { content: '💰'; display: inline-block; margin-right: 0.3rem; }
+.bi-wallet::before { content: '💳'; display: inline-block; margin-right: 0.3rem; }
+.bi-credit-card::before { content: '💳'; display: inline-block; margin-right: 0.3rem; }
+.bi-bank::before { content: '🏦'; display: inline-block; margin-right: 0.3rem; }
+.bi-piggy::before { content: '🐷'; display: inline-block; margin-right: 0.3rem; }
+.bi-target::before { content: '🎯'; display: inline-block; margin-right: 0.3rem; }
+.bi-archive::before { content: '📦'; display: inline-block; margin-right: 0.3rem; }
+
+/* Remove icons that don't exist in the CSS before they break layout */
+.bi:not([class*="bi-"]) {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+}
+
+/* Ensure icons don't break when CSS fails */
+i.bi {
+    display: inline-block;
+    margin: 0 0.25rem;
+}
+
+/* Loading spinner for offline mode */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading-icon {
+    display: inline-block;
+    animation: spin 2s linear infinite;
+}
+
+/* Offline badge */
+.offline-badge {
+    display: inline-block;
+    background: #ff6b6b;
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-left: 0.5rem;
+}
+
+/* Disabled state for offline features */
+.offline-disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.offline-disabled:hover {
+    opacity: 0.6;
+}

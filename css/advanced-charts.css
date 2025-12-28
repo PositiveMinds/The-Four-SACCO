@@ -1,0 +1,381 @@
+/**
+ * Advanced Charts Styling
+ * Professional, responsive, and mobile-optimized
+ */
+
+/* Chart Containers */
+#savingsTrendChart,
+#topMembersBarChart,
+#financialWaterfallChart,
+#comparisonChart,
+#repaymentMetricsChart {
+    width: 100%;
+    height: 400px;
+    transition: height 0.3s ease;
+}
+
+/* Chart Card Styling */
+.chart-card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+.chart-card:hover {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+}
+
+.chart-card .card-header {
+    background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+    border-bottom: 1px solid #e5e7eb;
+    padding: 1.25rem;
+}
+
+.chart-card .card-body {
+    padding: 2rem;
+    background: #fafbfc;
+}
+
+/* Filter Controls */
+.filter-controls {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.filter-controls input[type="date"],
+.filter-controls select {
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    background-color: #ffffff;
+    transition: all 0.2s ease;
+}
+
+.filter-controls input[type="date"]:focus,
+.filter-controls select:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Export Buttons */
+.btn-export {
+    border-radius: 6px;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.btn-export:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-export i {
+    margin-right: 0.5rem;
+    vertical-align: -2px;
+}
+
+/* Header Flex Adjustments */
+.card-header {
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+/* Responsive Mobile */
+@media (max-width: 992px) {
+    #savingsTrendChart,
+    #topMembersBarChart,
+    #financialWaterfallChart,
+    #comparisonChart,
+    #repaymentMetricsChart {
+        height: 350px;
+    }
+
+    .chart-card .card-body {
+        padding: 1.5rem;
+    }
+
+    .filter-controls {
+        gap: 0.5rem;
+    }
+
+    .filter-controls input[type="date"],
+    .filter-controls select {
+        font-size: 0.8125rem;
+        padding: 0.4rem 0.6rem;
+    }
+
+    .btn-export {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8125rem;
+    }
+}
+
+@media (max-width: 768px) {
+    #savingsTrendChart,
+    #topMembersBarChart,
+    #financialWaterfallChart,
+    #comparisonChart,
+    #repaymentMetricsChart {
+        height: 300px;
+    }
+
+    .card-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .chart-card .card-header h5 {
+        width: 100%;
+        margin-bottom: 0.75rem;
+    }
+
+    .filter-controls {
+        width: 100%;
+        gap: 0.5rem;
+    }
+
+    .filter-controls input[type="date"],
+    .filter-controls select {
+        flex: 1;
+        min-width: 120px;
+        font-size: 0.75rem;
+    }
+
+    .btn-export {
+        flex: 1;
+        min-width: 100px;
+        padding: 0.4rem 0.6rem;
+        font-size: 0.75rem;
+    }
+
+    .btn-export i {
+        margin-right: 0.25rem;
+    }
+}
+
+@media (max-width: 576px) {
+    #savingsTrendChart,
+    #topMembersBarChart,
+    #financialWaterfallChart,
+    #comparisonChart,
+    #repaymentMetricsChart {
+        height: 250px;
+    }
+
+    .chart-card {
+        margin-bottom: 1rem;
+    }
+
+    .chart-card .card-body {
+        padding: 1rem;
+    }
+
+    .filter-controls {
+        flex-direction: column;
+    }
+
+    .filter-controls input[type="date"],
+    .filter-controls select,
+    .btn-export {
+        width: 100%;
+    }
+
+    .card-header {
+        padding: 1rem !important;
+    }
+
+    .btn-export {
+        padding: 0.5rem;
+        font-size: 0.7rem;
+    }
+
+    .btn-export span {
+        display: none;
+    }
+
+    .btn-export i::before {
+        content: attr(title);
+    }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    .chart-card .card-header {
+        background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+        border-bottom-color: #374151;
+    }
+
+    .chart-card .card-body {
+        background: #0f172a;
+    }
+
+    .filter-controls input[type="date"],
+    .filter-controls select {
+        background-color: #1f2937;
+        border-color: #4b5563;
+        color: #f3f4f6;
+    }
+
+    .filter-controls input[type="date"]:focus,
+    .filter-controls select:focus {
+        border-color: #60a5fa;
+        box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
+    }
+
+    .filter-controls input[type="date"]::placeholder {
+        color: #9ca3af;
+    }
+}
+
+/* Chart Legend Customization */
+.echarts-legend {
+    margin-bottom: 1rem;
+}
+
+/* Loading State */
+.chart-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 400px;
+    color: #6b7280;
+    font-size: 1rem;
+}
+
+.chart-loading::after {
+    content: '';
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-left: 10px;
+    border: 3px solid #e5e7eb;
+    border-top-color: #3b82f6;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Export Button States */
+.btn-export.exporting {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.btn-export.exported {
+    background-color: #10b981;
+    color: white;
+}
+
+/* Chart Header Icons */
+.chart-header-icon {
+    font-size: 1.25rem;
+    margin-right: 0.5rem;
+    vertical-align: -2px;
+}
+
+/* Comparison Period Selector */
+#comparisonPeriodSelect {
+    border-radius: 6px;
+    border: 1px solid #d1d5db;
+    padding: 0.5rem 2rem 0.5rem 0.75rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1.25rem;
+    padding-right: 2.5rem;
+    appearance: none;
+    cursor: pointer;
+}
+
+#comparisonPeriodSelect:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* PDF Export Button */
+#exportAllPdfBtn {
+    min-width: 250px;
+    padding: 0.75rem 2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+#exportAllPdfBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+}
+
+#exportAllPdfBtn i {
+    margin-right: 0.75rem;
+}
+
+/* Print Styles */
+@media print {
+    .chart-card .card-header {
+        page-break-after: avoid;
+    }
+
+    #savingsTrendChart,
+    #topMembersBarChart,
+    #financialWaterfallChart,
+    #comparisonChart,
+    #repaymentMetricsChart {
+        page-break-inside: avoid;
+        height: auto;
+    }
+
+    .filter-controls {
+        display: none;
+    }
+
+    .btn-export {
+        display: none;
+    }
+}
+
+/* Accessibility */
+.chart-card .card-header:focus-within {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+}
+
+/* Animation */
+.chart-card {
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Tooltip Styling for Charts */
+.echarts-tooltip {
+    z-index: 1000;
+    border-radius: 6px;
+    padding: 8px 12px;
+    background: rgba(0, 0, 0, 0.85);
+    color: white;
+    font-size: 0.875rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}

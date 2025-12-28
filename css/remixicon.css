@@ -1,0 +1,169 @@
+/*
+ * Remix Icon v4.7.0 - Local Version
+ * https://remixicon.com
+ * https://github.com/Remix-Design/RemixIcon
+ *
+ * Copyright RemixIcon.com
+ * Released under the Apache License Version 2.0
+ *
+ * Local font paths configured for offline use
+ */
+@font-face {
+  font-family: "remixicon";
+  src: url('../vendor/RemixIcon/fonts/remixicon.eot?t=1760071648894'); /* IE9*/
+  src: url('../vendor/RemixIcon/fonts/remixicon.eot?t=1760071648894#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url("../vendor/RemixIcon/fonts/remixicon.woff2?t=1760071648894") format("woff2"),
+  url("../vendor/RemixIcon/fonts/remixicon.woff?t=1760071648894") format("woff"),
+  url('../vendor/RemixIcon/fonts/remixicon.ttf?t=1760071648894') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+  url('../vendor/RemixIcon/fonts/remixicon.svg?t=1760071648894#remixicon') format('svg'); /* iOS 4.1- */
+  font-display: swap;
+}
+
+[class^="ri-"], [class*=" ri-"] {
+  font-family: 'remixicon' !important;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.ri-lg { font-size: 1.3333em; line-height: 0.75em; vertical-align: -.0667em; }
+.ri-xl { font-size: 1.5em; line-height: 0.6666em; vertical-align: -.075em; }
+.ri-xxs { font-size: .5em; }
+.ri-xs { font-size: .75em; }
+.ri-sm { font-size: .875em }
+.ri-1x { font-size: 1em; }
+.ri-2x { font-size: 2em; }
+.ri-3x { font-size: 3em; }
+.ri-4x { font-size: 4em; }
+.ri-5x { font-size: 5em; }
+.ri-6x { font-size: 6em; }
+.ri-7x { font-size: 7em; }
+.ri-8x { font-size: 8em; }
+.ri-9x { font-size: 9em; }
+.ri-10x { font-size: 10em; }
+.ri-fw { text-align: center; width: 1.25em; }
+
+.ri-24-hours-fill:before { content: "\ea01"; }
+.ri-24-hours-line:before { content: "\ea02"; }
+.ri-4k-fill:before { content: "\ea03"; }
+.ri-4k-line:before { content: "\ea04"; }
+.ri-a-b:before { content: "\ea05"; }
+.ri-account-box-fill:before { content: "\ea06"; }
+.ri-account-box-line:before { content: "\ea07"; }
+.ri-account-circle-fill:before { content: "\ea08"; }
+.ri-account-circle-line:before { content: "\ea09"; }
+.ri-account-pin-box-fill:before { content: "\ea0a"; }
+.ri-account-pin-box-line:before { content: "\ea0b"; }
+.ri-account-pin-circle-fill:before { content: "\ea0c"; }
+.ri-account-pin-circle-line:before { content: "\ea0d"; }
+.ri-add-box-fill:before { content: "\ea0e"; }
+.ri-add-box-line:before { content: "\ea0f"; }
+.ri-add-circle-fill:before { content: "\ea10"; }
+.ri-add-circle-line:before { content: "\ea11"; }
+.ri-add-fill:before { content: "\ea12"; }
+.ri-add-line:before { content: "\ea13"; }
+.ri-admin-fill:before { content: "\ea14"; }
+.ri-admin-line:before { content: "\ea15"; }
+.ri-advertisement-fill:before { content: "\ea16"; }
+.ri-advertisement-line:before { content: "\ea17"; }
+.ri-airplay-fill:before { content: "\ea18"; }
+.ri-airplay-line:before { content: "\ea19"; }
+.ri-alarm-fill:before { content: "\ea1a"; }
+.ri-alarm-line:before { content: "\ea1b"; }
+.ri-alarm-warning-fill:before { content: "\ea1c"; }
+.ri-alarm-warning-line:before { content: "\ea1d"; }
+.ri-album-fill:before { content: "\ea1e"; }
+.ri-album-line:before { content: "\ea1f"; }
+.ri-alert-fill:before { content: "\ea20"; }
+.ri-alert-line:before { content: "\ea21"; }
+.ri-aliens-fill:before { content: "\ea22"; }
+.ri-aliens-line:before { content: "\ea23"; }
+.ri-align-bottom:before { content: "\ea24"; }
+.ri-align-center:before { content: "\ea25"; }
+.ri-align-justify:before { content: "\ea26"; }
+.ri-align-left:before { content: "\ea27"; }
+.ri-align-right:before { content: "\ea28"; }
+.ri-align-top:before { content: "\ea29"; }
+.ri-align-vertically:before { content: "\ea2a"; }
+.ri-alipay-fill:before { content: "\ea2b"; }
+.ri-alipay-line:before { content: "\ea2c"; }
+.ri-amazon-fill:before { content: "\ea2d"; }
+.ri-amazon-line:before { content: "\ea2e"; }
+.ri-anchor-fill:before { content: "\ea2f"; }
+.ri-anchor-line:before { content: "\ea30"; }
+.ri-ancient-gate-fill:before { content: "\ea31"; }
+.ri-ancient-gate-line:before { content: "\ea32"; }
+.ri-ancient-pavilion-fill:before { content: "\ea33"; }
+.ri-ancient-pavilion-line:before { content: "\ea34"; }
+.ri-android-fill:before { content: "\ea35"; }
+.ri-android-line:before { content: "\ea36"; }
+.ri-angularjs-fill:before { content: "\ea37"; }
+
+/* Additional icon classes - commonly used in SACCO app */
+.ri-search-line:before { content: "\f1f6"; }
+.ri-download-cloud-line:before { content: "\f401"; }
+.ri-download-cloud-2-line:before { content: "\f402"; }
+.ri-settings-3-line:before { content: "\f1a8"; }
+.ri-user-line:before { content: "\f106"; }
+.ri-user-add-line:before { content: "\f107"; }
+.ri-users-line:before { content: "\f10a"; }
+.ri-delete-bin-line:before { content: "\f088"; }
+.ri-edit-line:before { content: "\f05d"; }
+.ri-eye-line:before { content: "\f06e"; }
+.ri-file-excel-line:before { content: "\f116"; }
+.ri-file-pdf-line:before { content: "\f118"; }
+.ri-printer-line:before { content: "\f1bd"; }
+.ri-table-2:before { content: "\f141"; }
+.ri-grid-line:before { content: "\f0d3"; }
+.ri-download-2-line:before { content: "\f03e"; }
+.ri-upload-cloud-line:before { content: "\f40a"; }
+.ri-close-line:before { content: "\f130"; }
+.ri-menu-line:before { content: "\f136"; }
+.ri-money-dollar-circle-line:before { content: "\f5f7"; }
+.ri-bank-card-line:before { content: "\f030"; }
+.ri-calendar-line:before { content: "\f063"; }
+.ri-time-line:before { content: "\f11c"; }
+.ri-phone-line:before { content: "\f1b9"; }
+.ri-mail-line:before { content: "\f129"; }
+.ri-arrow-right-line:before { content: "\f053"; }
+.ri-arrow-left-line:before { content: "\f052"; }
+.ri-arrow-down-circle-line:before { content: "\f059"; }
+.ri-arrow-down-circle-fill:before { content: "\f058"; }
+.ri-check-line:before { content: "\f075"; }
+.ri-close-fill:before { content: "\f0a3"; }
+.ri-warning-line:before { content: "\f1d4"; }
+.ri-error-warning-line:before { content: "\f112"; }
+.ri-information-line:before { content: "\f12c"; }
+.ri-success-line:before { content: "\f1ae"; }
+.ri-more-fill:before { content: "\f14c"; }
+.ri-more-line:before { content: "\f14d"; }
+.ri-more-2-fill:before { content: "\f14e"; }
+.ri-more-2-line:before { content: "\f14f"; }
+.ri-settings-line:before { content: "\f1a7"; }
+.ri-logout-box-line:before { content: "\f2f5"; }
+.ri-login-box-line:before { content: "\f2f4"; }
+.ri-home-line:before { content: "\f0ce"; }
+.ri-dashboard-line:before { content: "\f0ef"; }
+.ri-bar-chart-line:before { content: "\f109"; }
+.ri-pie-chart-line:before { content: "\f1ad"; }
+.ri-line-chart-line:before { content: "\f2b9"; }
+.ri-download-line:before { content: "\f03d"; }
+.ri-upload-line:before { content: "\f166"; }
+.ri-cloud-download-line:before { content: "\f084"; }
+.ri-backup-line:before { content: "\f035"; }
+.ri-save-line:before { content: "\f1a5"; }
+.ri-refresh-line:before { content: "\f1ba"; }
+.ri-gear-fill:before { content: "\f0ca"; }
+.ri-gear-line:before { content: "\f0cb"; }
+.ri-database-line:before { content: "\f0f0"; }
+.ri-lock-line:before { content: "\f131"; }
+.ri-unlock-line:before { content: "\f165"; }
+.ri-eye-off-line:before { content: "\f06f"; }
+.ri-filter-line:before { content: "\f11d"; }
+.ri-sort-asc:before { content: "\f1ac"; }
+.ri-sort-desc:before { content: "\f1ad"; }
+.ri-exchange-line:before { content: "\f113"; }
+.ri-swap-line:before { content: "\f1b0"; }
+.ri-lightbulb-line:before { content: "\f119"; }
+.ri-notification-2-line:before { content: "\f151"; }
+.ri-account-box-line:before { content: "\f07"; }
