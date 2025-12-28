@@ -98,7 +98,7 @@ class OfflinePDFGenerator {
                     h1 { 
                         text-align: center; 
                         color: #1f2937;
-                        border-bottom: 2px solid #3b82f6;
+                        border-bottom: 2px solid #FFCC00;
                         padding-bottom: 10px;
                     }
                     h2 {
@@ -155,7 +155,7 @@ class OfflinePDFGenerator {
                     <p>Date: ${new Date().toLocaleString()}</p>
                 </div>
                 <div class="no-print" style="margin-top: 20px; text-align: center;">
-                    <button onclick="window.print()" style="padding: 10px 20px; background: #3b82f6; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                    <button onclick="window.print()" style="padding: 10px 20px; background: #FFCC00; color: #0f0f0f; border: none; border-radius: 5px; cursor: pointer; font-weight: 600;">
                         Print or Save as PDF
                     </button>
                     <button onclick="window.close()" style="padding: 10px 20px; background: #d1d5db; color: #333; border: none; border-radius: 5px; cursor: pointer; margin-left: 10px;">

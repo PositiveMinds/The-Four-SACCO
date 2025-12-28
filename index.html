@@ -10,18 +10,18 @@
     <meta name="theme-color" content="#FFCC00" media="(prefers-color-scheme: light)">
     <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
     <meta name="msapplication-TileColor" content="#FFCC00">
-    <meta name="msapplication-TileImage" content="/images/image-192.png">
-    <meta name="msapplication-config" content="/browserconfig.xml">
+    <meta name="msapplication-TileImage" content="./images/image-192.png">
+    <meta name="msapplication-config" content="./browserconfig.xml">
     <title>The Four - SACCO Management System</title>
     
     <!-- Favicon -->
-    <link rel="icon" type="image/png" sizes="32x32" href="/images/32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/images/16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./images/32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./images/16x16.png">
     
     <!-- Apple Touch Icons -->
-    <link rel="apple-touch-icon" sizes="180x180" href="/images/180x180.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="/images/144x144.png">
-    <link rel="apple-touch-icon" sizes="64x64" href="/images/64x64.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="./images/180x180.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="./images/144x144.png">
+    <link rel="apple-touch-icon" sizes="64x64" href="./images/64x64.png">
     
     <!-- PWA Splash Screens for iOS -->
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -43,21 +43,27 @@
     <!-- Additional Custom Styles (complementary to Bootstrap) -->
     <link rel="stylesheet" href="css/style.css">
 
+    <!-- Enhanced Form Controls -->
+    <link rel="stylesheet" href="css/form-enhanced.css">
+
     <!-- Advanced Charts Styling -->
     <link rel="stylesheet" href="css/advanced-charts.css">
 
-    <!-- Choices.js CSS (Local) -->
-    <link rel="stylesheet" href="vendor/Choices/public/assets/styles/choices.min.css">
-    
-    <!-- Manifest for PWA -->
-    <link rel="manifest" href="/manifest.json">
+    <!-- Select2 CSS -->
+    <link rel="stylesheet" href="vendor/select2-develop/select2-develop/dist/css/select2.min.css">
+
+    <!-- Select2 Custom Styling -->
+    <link rel="stylesheet" href="css/select2-custom.css">
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="./manifest.json">
 </head>
 
 <body>
     <!-- Splash Screen -->
     <div id="splashScreen" class="splash-screen">
         <div class="splash-content">
-            <img src="/images/image-192.png" alt="The Four" class="splash-logo">
+            <img src="./images/image-192.png" alt="The Four" class="splash-logo">
             <h1 class="splash-title">The Four</h1>
             <p class="splash-subtitle">SACCO Management System</p>
             <div class="splash-loader">
@@ -99,7 +105,7 @@
                     <div class="col-md-8">
                         <h1 class="mb-1 responsive-header"
                             style="letter-spacing: -1.5px; color: #0f0f0f; text-shadow: 0 2px 8px rgba(0,0,0,0.12); font-weight: 800; margin-bottom: 0.5rem;">
-                            <img src="/images/image-192.png" alt="The Four" style="height: 2.5rem; width: auto; vertical-align: middle; margin-right: 0.5rem;"> The Four
+                            <img src="./images/image-192.png" alt="The Four" style="height: 2.5rem; width: auto; vertical-align: middle; margin-right: 0.5rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.15);"> The Four
                         </h1>
                         <p class="mb-0 responsive-subheader" style="opacity: 0.95; color: #1a1a1a; font-weight: 500;">
                             Savings and Credit Cooperative Society Management
@@ -233,14 +239,9 @@
                         <div class="card shadow-sm">
                             <div class="card-header d-flex justify-content-between align-items-center">
                                 <h5 class="mb-0">📝 Recent Activity</h5>
-                                <div class="input-group" style="max-width: 200px;">
-                                    <span class="input-group-text bg-white border-end-0">
-                                        <i class="ri-filter-line"></i>
-                                    </span>
-                                    <select class="form-select border-start-0" id="activityMemberFilter">
-                                        <option value="">All Members</option>
-                                    </select>
-                                </div>
+                                <select class="virtual-select" id="activityMemberFilter" placeholder="Search members...">
+                                    <option value="">All Members</option>
+                                </select>
                             </div>
                             <div class="card-body p-0">
                                 <div class="table-responsive">
@@ -279,22 +280,7 @@
                                 </div>
                                 <div class="card-body">
                                     <form id="memberForm">
-                                        <div class="mb-3">
-                                            <label for="memberPhoto" class="form-label">Member Photo</label>
-                                            <div class="upload-area" style="position: relative;">
-                                                <div class="photo-upload-container">
-                                                    <input type="file" class="form-control" id="memberPhoto" accept="image/*" onchange="App.previewMemberPhoto(event)" style="position: relative; z-index: 2;">
-                                                    <div id="photoUploadHint" class="photo-upload-hint" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; font-size: 0.85rem; color: #6c757d; z-index: 1;">
-                                                        <i class="ri-image-add-line" style="margin-right: 0.5rem; font-size: 1.5rem;"></i> Click to upload
-                                                    </div>
-                                                </div>
-                                                <button type="button" class="btn btn-sm btn-outline-primary" id="viewPhotoBtn" style="display: none; width: 100%; margin-top: 0.5rem;" onclick="App.viewPhotoModal()" title="View photo">
-                                                    <i class="ri-image-view-line"></i> View Photo
-                                                </button>
-                                            </div>
-                                            <small class="text-muted">JPG, PNG up to 5MB</small>
-                                        </div>
-                                        <div class="mb-3">
+                                         <div class="mb-3">
                                              <label for="memberName" class="form-label">Full Name</label>
                                              <input type="text" class="form-control" id="memberName"
                                                  placeholder="Full Name" required>
@@ -325,19 +311,19 @@
                                 <h5 class="mb-0">Registered Members</h5>
                                 <div class="input-group" style="max-width: 250px;">
                                     <span class="input-group-text bg-white border-end-0">
-                                        <i class="ri-search-line"></i>
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width: 1rem; height: 1rem;"><path d="M18.031 16.6168L22.3137 20.8995L20.8995 22.3137L16.6168 18.031C15.0769 19.263 13.124 20 11 20C6.032 20 2 15.968 2 11C2 6.032 6.032 2 11 2C15.968 2 20 6.032 20 11C20 13.124 19.263 15.0769 18.031 16.6168ZM16.0247 15.8748C17.2475 14.6146 18 12.8956 18 11C18 7.1325 14.8675 4 11 4C7.1325 4 4 7.1325 4 11C4 14.8675 7.1325 18 11 18C12.8956 18 14.6146 17.2475 15.8748 16.0247L16.0247 15.8748Z"></path></svg>
                                     </span>
-                                    <input type="text" id="memberSearch" class="form-control border-start-0"
+                                    <input type="text" id="memberSearch" class="form-control form-control-enhanced border-start-0"
                                         placeholder="Search members...">
                                 </div>
                                 <div class="btn-group view-toggle" role="group">
                                     <button type="button" class="btn btn-sm view-btn active" id="cardViewBtn"
                                         data-view="card" title="Card View">
-                                        <i class="ri-grid-line"></i> Card View
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width: 1rem; height: 1rem; vertical-align: -2px; margin-right: 0.3rem;"><path d="M22 12.999V20C22 20.5523 21.5523 21 21 21H13V12.999H22ZM11 12.999V21H3C2.44772 21 2 20.5523 2 20V12.999H11ZM11 3V10.999H2V4C2 3.44772 2.44772 3 3 3H11ZM21 3C21.5523 3 22 3.44772 22 4V10.999H13V3H21Z"></path></svg> Card View
                                     </button>
                                     <button type="button" class="btn btn-sm view-btn" id="tableViewBtn"
                                         data-view="table" title="Table View">
-                                        <i class="ri-table-2"></i> Table View
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width: 1rem; height: 1rem; vertical-align: -2px; margin-right: 0.3rem;"><path d="M15 21H9V10H15V21ZM17 21V10H22V20C22 20.5523 21.5523 21 21 21H17ZM7 21H3C2.44772 21 2 20.5523 2 20V10H7V21ZM22 8H2V4C2 3.44772 2.44772 3 3 3H21C21.5523 3 22 3.44772 22 4V8Z"></path></svg> Table View
                                     </button>
                                 </div>
                             </div>
@@ -364,15 +350,10 @@
                                 <div class="card-body">
                                     <form id="loanForm">
                                          <div class="mb-3">
-                                             <label for="loanMember" class="form-label"><i class="ri-user-search-line" style="margin-right: 0.4rem;"></i>Member</label>
-                                             <div class="input-group">
-                                                 <span class="input-group-text bg-white border-end-0">
-                                                     <i class="ri-search-line"></i>
-                                                 </span>
-                                                 <select class="form-select border-start-0" id="loanMember" required>
-                                                     <option value="">Select Member</option>
-                                                 </select>
-                                             </div>
+                                             <label for="loanMember" class="form-label">Member</label>
+                                             <select class="virtual-select" id="loanMember" placeholder="Search member..." required>
+                                                 <option value="" disabled selected>Select member...</option>
+                                             </select>
                                          </div>
                                         <div class="mb-3">
                                             <label for="loanAmount" class="form-label">Amount (UGX)</label>
@@ -411,9 +392,9 @@
                                     <h5 class="mb-0">Loan Records</h5>
                                     <div class="input-group" style="max-width: 200px;">
                                         <span class="input-group-text bg-white border-end-0">
-                                            <i class="ri-search-line"></i>
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width: 1rem; height: 1rem;"><path d="M18.031 16.6168L22.3137 20.8995L20.8995 22.3137L16.6168 18.031C15.0769 19.263 13.124 20 11 20C6.032 20 2 15.968 2 11C2 6.032 6.032 2 11 2C15.968 2 20 6.032 20 11C20 13.124 19.263 15.0769 18.031 16.6168ZM16.0247 15.8748C17.2475 14.6146 18 12.8956 18 11C18 7.1325 14.8675 4 11 4C7.1325 4 4 7.1325 4 11C4 14.8675 7.1325 18 11 18C12.8956 18 14.6146 17.2475 15.8748 16.0247L16.0247 15.8748Z"></path></svg>
                                         </span>
-                                        <input type="text" id="loanSearch" class="form-control border-start-0"
+                                        <input type="text" id="loanSearch" class="form-control form-control-enhanced border-start-0"
                                             placeholder="Search loans...">
                                     </div>
                                 </div>
@@ -459,15 +440,10 @@
                                 <div class="card-body">
                                     <form id="paymentForm">
                                          <div class="mb-3">
-                                             <label for="paymentLoan" class="form-label"><i class="ri-file-search-line" style="margin-right: 0.4rem;"></i>Select Loan</label>
-                                             <div class="input-group">
-                                                 <span class="input-group-text bg-white border-end-0">
-                                                     <i class="ri-search-line"></i>
-                                                 </span>
-                                                 <select class="form-select border-start-0" id="paymentLoan" required>
-                                                     <option value="">Select Loan</option>
-                                                 </select>
-                                             </div>
+                                             <label for="paymentLoan" class="form-label">Select Loan</label>
+                                             <select class="virtual-select" id="paymentLoan" placeholder="Search loan..." required>
+                                                  <option value="" disabled selected>Select loan...</option>
+                                             </select>
                                          </div>
                                         <div class="mb-3">
                                             <label for="paymentAmount" class="form-label">Amount (UGX)</label>
@@ -526,15 +502,13 @@
                                     <h5 class="mb-0">Member Details</h5>
                                 </div>
                                 <div class="card-body">
-                                    <label for="reportMember" class="form-label"><i class="ri-user-search-line" style="margin-right: 0.4rem;"></i>Select Member</label>
-                                    <div class="input-group mb-3">
-                                        <span class="input-group-text bg-white border-end-0">
-                                            <i class="ri-search-line"></i>
-                                        </span>
-                                        <select class="form-select border-start-0" id="reportMember">
-                                            <option value="">Select Member</option>
-                                        </select>
-                                    </div>
+                                    <label for="reportMember" class="form-label">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width: 1rem; height: 1rem; margin-right: 0.4rem; vertical-align: -2px;"><path d="M18.031 16.6168L22.3137 20.8995L20.8995 22.3137L16.6168 18.031C15.0769 19.263 13.124 20 11 20C6.032 20 2 15.968 2 11C2 6.032 6.032 2 11 2C15.968 2 20 6.032 20 11C20 13.124 19.263 15.0769 18.031 16.6168ZM16.0247 15.8748C17.2475 14.6146 18 12.8956 18 11C18 7.1325 14.8675 4 11 4C7.1325 4 4 7.1325 4 11C4 14.8675 7.1325 18 11 18C12.8956 18 14.6146 17.2475 15.8748 16.0247L16.0247 15.8748Z"></path></svg>
+                                        Select Member
+                                    </label>
+                                    <select class="virtual-select" id="reportMember" placeholder="Search member...">
+                                        <option value="">Select Member</option>
+                                    </select>
                                     <div id="memberReport" class="text-muted text-center py-4">
                                         Select a member to view details
                                     </div>
@@ -683,7 +657,7 @@
                                 <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
                                     <h5 class="mb-0">📊 Period Comparison Analysis</h5>
                                     <div class="d-flex gap-2 flex-wrap" style="align-items: center;">
-                                        <select class="form-select form-select-sm" id="comparisonPeriodSelect" style="max-width: 150px;">
+                                        <select class="virtual-select" id="comparisonPeriodSelect" placeholder="Select period..." style="max-width: 150px;">
                                             <option value="monthly">Month-over-Month</option>
                                             <option value="yearly">Year-over-Year</option>
                                         </select>
@@ -735,14 +709,13 @@
                         <div class="col-lg-3">
                              <div class="card shadow-sm">
                                  <div class="card-header">
-                                     <h5 class="mb-0"><i class="ri-user-search-line" style="margin-right: 0.4rem;"></i>Select Member</h5>
+                                     <h5 class="mb-0">
+                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width: 1rem; height: 1rem; margin-right: 0.4rem; vertical-align: -2px;"><path d="M18.031 16.6168L22.3137 20.8995L20.8995 22.3137L16.6168 18.031C15.0769 19.263 13.124 20 11 20C6.032 20 2 15.968 2 11C2 6.032 6.032 2 11 2C15.968 2 20 6.032 20 11C20 13.124 19.263 15.0769 18.031 16.6168ZM16.0247 15.8748C17.2475 14.6146 18 12.8956 18 11C18 7.1325 14.8675 4 11 4C7.1325 4 4 7.1325 4 11C4 14.8675 7.1325 18 11 18C12.8956 18 14.6146 17.2475 15.8748 16.0247L16.0247 15.8748Z"></path></svg>
+                                         Select Member
+                                     </h5>
                                  </div>
                                  <div class="card-body">
-                                     <div class="input-group">
-                                         <span class="input-group-text bg-white border-end-0">
-                                             <i class="ri-search-line"></i>
-                                         </span>
-                                         <select class="form-select border-start-0" id="transactionMemberSelect" required>
+                                     <select class="virtual-select" id="transactionMemberSelect" placeholder="Search member..." required>
                                              <option value="">Choose a member...</option>
                                          </select>
                                      </div>
@@ -871,15 +844,10 @@
                                 <div class="card-body">
                                     <form id="savingForm">
                                          <div class="mb-3">
-                                             <label for="savingMember" class="form-label"><i class="ri-user-search-line" style="margin-right: 0.4rem;"></i>Member</label>
-                                             <div class="input-group">
-                                                 <span class="input-group-text bg-white border-end-0">
-                                                     <i class="ri-search-line"></i>
-                                                 </span>
-                                                 <select class="form-select border-start-0" id="savingMember" required>
-                                                     <option value="">Select Member</option>
-                                                 </select>
-                                             </div>
+                                             <label for="savingMember" class="form-label">Member</label>
+                                             <select class="virtual-select" id="savingMember" placeholder="Search member..." required>
+                                                 <option value="" disabled selected>Select member...</option>
+                                             </select>
                                          </div>
                                         <div class="mb-3">
                                             <label for="savingAmount" class="form-label">Amount (UGX)</label>
@@ -904,15 +872,13 @@
                                 <div class="card-body">
                                     <form id="withdrawalForm">
                                          <div class="mb-3">
-                                             <label for="withdrawalMember" class="form-label"><i class="ri-user-search-line" style="margin-right: 0.4rem;"></i>Member</label>
-                                             <div class="input-group">
-                                                 <span class="input-group-text bg-white border-end-0">
-                                                     <i class="ri-search-line"></i>
-                                                 </span>
-                                                 <select class="form-select border-start-0" id="withdrawalMember" required>
-                                                     <option value="">Select Member</option>
-                                                 </select>
-                                             </div>
+                                             <label for="withdrawalMember" class="form-label">
+                                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width: 1rem; height: 1rem; margin-right: 0.4rem; vertical-align: -2px;"><path d="M18.031 16.6168L22.3137 20.8995L20.8995 22.3137L16.6168 18.031C15.0769 19.263 13.124 20 11 20C6.032 20 2 15.968 2 11C2 6.032 6.032 2 11 2C15.968 2 20 6.032 20 11C20 13.124 19.263 15.0769 18.031 16.6168ZM16.0247 15.8748C17.2475 14.6146 18 12.8956 18 11C18 7.1325 14.8675 4 11 4C7.1325 4 4 7.1325 4 11C4 14.8675 7.1325 18 11 18C12.8956 18 14.6146 17.2475 15.8748 16.0247L16.0247 15.8748Z"></path></svg>
+                                                 Member
+                                             </label>
+                                             <select class="virtual-select" id="withdrawalMember" placeholder="Search member..." required>
+                                                 <option value="">Select Member</option>
+                                             </select>
                                          </div>
                                         <div class="mb-3">
                                             <label for="withdrawalAmount" class="form-label">Amount (UGX)</label>
@@ -1146,7 +1112,7 @@
                 <div class="feature-section">
                     <h6 class="feature-title">🌐 Language Support</h6>
                     <p class="feature-desc">Choose receipt language</p>
-                    <select class="form-select form-select-sm" id="languageSelect">
+                    <select class="virtual-select" id="languageSelect" placeholder="Select language...">
                         <option value="en">English</option>
                         <option value="sw">Swahili</option>
                         <option value="lg">Luganda</option>
@@ -1155,26 +1121,7 @@
             </div>
         </div>
 
-        <!-- Photo Preview Modal -->
-        <div class="modal fade" id="photoPreviewModal" tabindex="-1" aria-labelledby="photoPreviewLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-sm">
-                <div class="modal-content">
-                    <div class="modal-header border-0">
-                        <h5 class="modal-title" id="photoPreviewLabel">Member Photo</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body text-center" style="padding: 2rem 1.5rem;">
-                        <img id="modalPhotoPreview" src="" alt="Member Photo" style="max-width: 100%; max-height: 400px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
-                    </div>
-                    <div class="modal-footer border-0">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-danger" id="deletePhotoBtn" onclick="App.removeMemberPhoto()">
-                            <i class="ri-delete-bin-line"></i> Delete Photo
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
+
 
         <!-- Sidebar Toggle Button (FAB) -->
         <button id="toggleSidebarBtn" class="sidebar-toggle-btn" title="Open Settings">
@@ -1203,8 +1150,59 @@
     <!-- SweetAlert2 JS (Local) -->
     <script src="vendor/sweetalert/dist/sweetalert2.all.min.js"></script>
 
-    <!-- Choices.js JS (Local) -->
-    <script src="vendor/Choices/public/assets/scripts/choices.min.js"></script>
+    <!-- jQuery (required for Select2) -->
+    <script src="vendor/jquery/jquery-3.7.1.min.js"></script>
+    
+    <!-- Select2 JS -->
+    <script src="vendor/select2-develop/select2-develop/dist/js/select2.min.js"></script>
+    
+    <!-- Select2 Initialization -->
+    <script>
+        function initializeSelect2() {
+            console.log('Attempting Select2 initialization...');
+            console.log('jQuery available:', typeof window.jQuery !== 'undefined');
+            console.log('Select2 available:', typeof window.jQuery !== 'undefined' && typeof window.jQuery.fn.select2 !== 'undefined');
+            
+            if (typeof window.jQuery === 'undefined' || typeof window.jQuery.fn.select2 === 'undefined') {
+                console.warn('Select2 not yet loaded, retrying in 200ms...');
+                setTimeout(initializeSelect2, 200);
+                return;
+            }
+            
+            console.log('Select2 is available, initializing elements...');
+            var selectElements = document.querySelectorAll('.virtual-select');
+            console.log('Found ' + selectElements.length + ' select2 elements');
+            
+            selectElements.forEach(function(el) {
+                console.log('Initializing element:', el.id, 'with options:', el.options.length);
+                try {
+                    window.jQuery('#' + el.id).select2({
+                        placeholder: el.getAttribute('placeholder') || 'Select an option...',
+                        allowClear: true,
+                        width: '100%',
+                        language: {
+                            searching: function() { return 'Searching...'; }
+                        }
+                    });
+                    console.log('✓ Successfully initialized:', el.id);
+                } catch (e) {
+                    console.error('✗ Error initializing ' + el.id + ':', e.message);
+                }
+            });
+        }
+        
+        // Initialize when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', function() {
+                setTimeout(initializeSelect2, 300);
+            });
+        } else {
+            setTimeout(initializeSelect2, 300);
+        }
+        
+        // Also try when window loads
+        window.addEventListener('load', initializeSelect2);
+    </script>
 
     <!-- Custom Scripts -->
     <script src="js/sweetalert-integration.js"></script>
@@ -1231,14 +1229,13 @@
     <script src="js/profit-chart.js"></script>
     <!-- Load advanced-charts.js AFTER indexeddb.js to ensure IndexedDBManager is available -->
     <script src="js/advanced-charts.js"></script>
-    <!-- Choices.js Initialization -->
-    <script src="js/choices-init.js"></script>
+
 
     <!-- Service Worker Registration -->
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/service-worker.js')
+          navigator.serviceWorker.register('./service-worker.js')
             .then(registration => {
               console.log('Service Worker registered successfully:', registration);
             })
@@ -1247,6 +1244,27 @@
             });
         });
       }
+      
+      // Initialize Select2 after page loads
+      window.addEventListener('load', () => {
+        console.log('Page loaded, Select2 available:', typeof jQuery !== 'undefined' && typeof jQuery.fn.select2 !== 'undefined');
+        if (typeof jQuery !== 'undefined' && typeof jQuery.fn.select2 !== 'undefined') {
+          const selectElements = document.querySelectorAll('.virtual-select');
+          console.log('Found select2 elements:', selectElements.length);
+          selectElements.forEach(el => {
+            console.log('Initializing:', el.id);
+            try {
+              jQuery('#' + el.id).select2({
+                placeholder: el.getAttribute('placeholder') || 'Select an option...',
+                allowClear: true,
+                width: '100%'
+              });
+            } catch (e) {
+              console.error('Error initializing ' + el.id, e);
+            }
+          });
+        }
+      });
     </script>
 
     <!-- Splash Screen Handler -->
@@ -1269,8 +1287,8 @@
         hideSplashScreen();
       }
 
-      // Fallback: hide splash screen after 3 seconds max
-      setTimeout(hideSplashScreen, 3000);
+      // Fallback: hide splash screen after 5 seconds max
+      setTimeout(hideSplashScreen, 5000);
     </script>
 </body>
 

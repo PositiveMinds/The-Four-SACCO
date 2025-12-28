@@ -54,6 +54,7 @@ class AdvancedCharts {
         this.setupFilterControls();
         this.setupExportButtons();
         this.startRealtimeUpdates();
+        this.applyMobileResponsiveness();
     }
 
     setupResizeListener() {
@@ -61,8 +62,33 @@ class AdvancedCharts {
         window.addEventListener('resize', () => {
             clearTimeout(resizeTimer);
             resizeTimer = setTimeout(() => {
+                this.applyMobileResponsiveness();
                 this.redrawAllCharts();
             }, 250);
+        });
+    }
+
+    /**
+     * Apply mobile-responsive settings based on screen width
+     */
+    applyMobileResponsiveness() {
+        const width = window.innerWidth;
+        const isMobile = width < 768;
+        const isTablet = width < 1024;
+
+        // Adjust chart heights
+        const charts = ['savingsTrendChart', 'topMembersBarChart', 'financialWaterfallChart', 'comparisonChart', 'repaymentMetricsChart'];
+        charts.forEach(chartId => {
+            const container = document.getElementById(chartId);
+            if (container) {
+                if (isMobile) {
+                    container.style.height = '280px';
+                } else if (isTablet) {
+                    container.style.height = '350px';
+                } else {
+                    container.style.height = '400px';
+                }
+            }
         });
     }
 
@@ -71,6 +97,58 @@ class AdvancedCharts {
         document.addEventListener('savingsUpdated', () => this.updateAllCharts());
         document.addEventListener('loansUpdated', () => this.updateAllCharts());
         document.addEventListener('paymentsUpdated', () => this.updateAllCharts());
+    }
+
+    /**
+     * Get responsive grid options based on screen width
+     */
+    getResponsiveGridOptions() {
+        const width = window.innerWidth;
+        const isMobile = width < 768;
+        const isTablet = width < 1024;
+
+        if (isMobile) {
+            return {
+                top: 50,
+                left: 45,
+                right: 15,
+                bottom: 40,
+                containLabel: true
+            };
+        } else if (isTablet) {
+            return {
+                top: 60,
+                left: 55,
+                right: 25,
+                bottom: 45,
+                containLabel: true
+            };
+        } else {
+            return {
+                top: 80,
+                left: 60,
+                right: 30,
+                bottom: 50,
+                containLabel: true
+            };
+        }
+    }
+
+    /**
+     * Get responsive axis label options based on screen width
+     */
+    getResponsiveAxisLabelOptions() {
+        const width = window.innerWidth;
+        const isMobile = width < 768;
+        const isTablet = width < 1024;
+
+        if (isMobile) {
+            return { fontSize: 9, rotate: 45 };
+        } else if (isTablet) {
+            return { fontSize: 10, rotate: 30 };
+        } else {
+            return { fontSize: 11, rotate: 0 };
+        }
     }
 
     /**
@@ -94,6 +172,9 @@ class AdvancedCharts {
         console.log('✓ Savings trend chart initialized');
 
         const data = await this.generateSavingsTrendData();
+        const isMobile = window.innerWidth < 768;
+        const axisLabelOptions = this.getResponsiveAxisLabelOptions();
+        
         const option = {
             backgroundColor: 'transparent',
             textStyle: { fontFamily: 'inherit' },
@@ -102,35 +183,30 @@ class AdvancedCharts {
                 backgroundColor: 'rgba(0, 0, 0, 0.8)',
                 borderColor: '#3B82F6',
                 borderWidth: 1,
-                textStyle: { color: '#fff', fontSize: 12 },
-                padding: [10, 15],
+                textStyle: { color: '#fff', fontSize: isMobile ? 10 : 12 },
+                padding: [8, 12],
                 formatter: (params) => {
                     if (!params.length) return '';
                     let result = `<strong>${params[0].axisValueLabel}</strong><br/>`;
                     params.forEach(param => {
-                        result += `<span style="color: ${param.color}">● ${param.seriesName}: <strong>UGX ${this.formatNumber(param.value)}</strong></span><br/>`;
+                        result += `<span style="color: ${param.color}; font-size: ${isMobile ? '9px' : '11px'}">● ${param.seriesName}: <strong>UGX ${this.formatNumber(param.value)}</strong></span><br/>`;
                     });
                     return result;
                 }
             },
             legend: {
-                top: 20,
+                top: 15,
                 left: 'center',
-                textStyle: { color: '#374151', fontSize: 12, fontWeight: 500 },
-                itemGap: 15
+                textStyle: { color: '#374151', fontSize: isMobile ? 10 : 12, fontWeight: 500 },
+                itemGap: isMobile ? 8 : 15,
+                orient: isMobile ? 'vertical' : 'horizontal'
             },
-            grid: {
-                top: 80,
-                left: 60,
-                right: 30,
-                bottom: 50,
-                containLabel: true
-            },
+            grid: this.getResponsiveGridOptions(),
             xAxis: {
                 type: 'category',
                 data: data.dates,
                 axisLine: { lineStyle: { color: '#E5E7EB', width: 1.5 } },
-                axisLabel: { color: '#6B7280', fontSize: 11 },
+                axisLabel: { color: '#6B7280', fontSize: axisLabelOptions.fontSize, rotate: axisLabelOptions.rotate },
                 axisTick: { lineStyle: { color: '#E5E7EB' } },
                 splitLine: { show: false }
             },
@@ -213,6 +289,9 @@ class AdvancedCharts {
         console.log('✓ Top members chart initialized');
 
         const data = await this.generateTopMembersData();
+        const isMobile = window.innerWidth < 768;
+        const axisLabelOptions = this.getResponsiveAxisLabelOptions();
+        
         const option = {
             backgroundColor: 'transparent',
             textStyle: { fontFamily: 'inherit' },
@@ -221,29 +300,23 @@ class AdvancedCharts {
                 backgroundColor: 'rgba(0, 0, 0, 0.8)',
                 borderColor: '#8B5CF6',
                 borderWidth: 1,
-                textStyle: { color: '#fff', fontSize: 12 },
-                padding: [10, 15],
+                textStyle: { color: '#fff', fontSize: isMobile ? 10 : 12 },
+                padding: [8, 12],
                 formatter: (params) => {
                     if (!params.length) return '';
                     const param = params[0];
-                    return `<strong>${param.name}</strong><br/><span style="color: ${param.color}">● Savings: <strong>UGX ${this.formatNumber(param.value)}</strong></span>`;
+                    return `<strong>${param.name}</strong><br/><span style="color: ${param.color}; font-size: ${isMobile ? '9px' : '11px'}">● Savings: <strong>UGX ${this.formatNumber(param.value)}</strong></span>`;
                 }
             },
             legend: {
                 show: false
             },
-            grid: {
-                top: 30,
-                left: 60,
-                right: 30,
-                bottom: 50,
-                containLabel: true
-            },
+            grid: this.getResponsiveGridOptions(),
             xAxis: {
                 type: 'category',
                 data: data.members,
                 axisLine: { show: false },
-                axisLabel: { color: '#6B7280', fontSize: 11, rotate: 45 },
+                axisLabel: { color: '#6B7280', fontSize: axisLabelOptions.fontSize, rotate: axisLabelOptions.rotate },
                 axisTick: { show: false }
             },
             yAxis: {
@@ -313,6 +386,10 @@ class AdvancedCharts {
         console.log('✓ Waterfall chart initialized');
 
         const data = await this.generateWaterfallData();
+        const isMobile = window.innerWidth < 768;
+        const isTablet = window.innerWidth < 1024;
+        const axisLabelOptions = this.getResponsiveAxisLabelOptions();
+        
         const option = {
             backgroundColor: 'transparent',
             textStyle: { fontFamily: 'inherit' },
@@ -321,8 +398,8 @@ class AdvancedCharts {
                 backgroundColor: 'rgba(0, 0, 0, 0.85)',
                 borderColor: '#06B6D4',
                 borderWidth: 1,
-                textStyle: { color: '#fff', fontSize: 12 },
-                padding: [10, 15],
+                textStyle: { color: '#fff', fontSize: isMobile ? 10 : 12 },
+                padding: [8, 12],
                 formatter: (params) => {
                     if (!params.length) return '';
                     const param = params[0];
@@ -337,17 +414,17 @@ class AdvancedCharts {
                 show: false
             },
             grid: {
-                top: 40,
-                left: 100,
-                right: 30,
-                bottom: 80,
+                top: isMobile ? 35 : 40,
+                left: isMobile ? 45 : isTablet ? 70 : 100,
+                right: isMobile ? 15 : 30,
+                bottom: isMobile ? 60 : 80,
                 containLabel: true
             },
             xAxis: {
                 type: 'category',
                 data: data.categories,
                 axisLine: { show: false },
-                axisLabel: { color: '#374151', fontSize: 12, fontWeight: 500, rotate: 45 },
+                axisLabel: { color: '#374151', fontSize: isMobile ? 8 : axisLabelOptions.fontSize, fontWeight: 500, rotate: isMobile ? 45 : axisLabelOptions.rotate },
                 axisTick: { show: false }
             },
             yAxis: {
@@ -808,6 +885,8 @@ class AdvancedCharts {
 
         const data = await this.generateComparisonData();
         const isPeriodMonthly = this.filters.comparisonPeriod === 'monthly';
+        const isMobile = window.innerWidth < 768;
+        const axisLabelOptions = this.getResponsiveAxisLabelOptions();
 
         const option = {
             backgroundColor: 'transparent',
@@ -816,26 +895,21 @@ class AdvancedCharts {
                 trigger: 'axis',
                 backgroundColor: 'rgba(0, 0, 0, 0.8)',
                 borderColor: '#06B6D4',
-                textStyle: { color: '#fff', fontSize: 12 },
-                padding: [10, 15]
+                textStyle: { color: '#fff', fontSize: isMobile ? 10 : 12 },
+                padding: [8, 12]
             },
             legend: {
-                top: 20,
+                top: 15,
                 left: 'center',
-                textStyle: { color: '#374151', fontSize: 12 }
+                textStyle: { color: '#374151', fontSize: isMobile ? 10 : 12 },
+                orient: isMobile ? 'vertical' : 'horizontal'
             },
-            grid: {
-                top: 80,
-                left: 60,
-                right: 30,
-                bottom: 50,
-                containLabel: true
-            },
+            grid: this.getResponsiveGridOptions(),
             xAxis: {
                 type: 'category',
                 data: data.periods,
                 axisLine: { lineStyle: { color: '#E5E7EB' } },
-                axisLabel: { color: '#6B7280', fontSize: 11 }
+                axisLabel: { color: '#6B7280', fontSize: axisLabelOptions.fontSize, rotate: axisLabelOptions.rotate }
             },
             yAxis: {
                 type: 'value',
@@ -880,6 +954,8 @@ class AdvancedCharts {
         console.log('✓ Repayment metrics chart initialized');
 
         const data = await this.generateRepaymentMetricsData();
+        const isMobile = window.innerWidth < 768;
+        const axisLabelOptions = this.getResponsiveAxisLabelOptions();
 
         const option = {
             backgroundColor: 'transparent',
@@ -888,32 +964,27 @@ class AdvancedCharts {
                 trigger: 'axis',
                 backgroundColor: 'rgba(0, 0, 0, 0.8)',
                 borderColor: '#10B981',
-                textStyle: { color: '#fff', fontSize: 12 },
+                textStyle: { color: '#fff', fontSize: isMobile ? 10 : 12 },
                 formatter: (params) => {
                     let result = `<strong>${params[0].axisValueLabel}</strong><br/>`;
                     params.forEach(param => {
-                        result += `<span style="color: ${param.color}">● ${param.seriesName}: <strong>UGX ${this.formatNumber(param.value)}</strong></span><br/>`;
+                        result += `<span style="color: ${param.color}; font-size: ${isMobile ? '9px' : '11px'}">● ${param.seriesName}: <strong>UGX ${this.formatNumber(param.value)}</strong></span><br/>`;
                     });
                     return result;
                 }
             },
             legend: {
-                top: 20,
+                top: 15,
                 left: 'center',
-                textStyle: { color: '#374151', fontSize: 12 }
+                textStyle: { color: '#374151', fontSize: isMobile ? 10 : 12 },
+                orient: isMobile ? 'vertical' : 'horizontal'
             },
-            grid: {
-                top: 80,
-                left: 60,
-                right: 30,
-                bottom: 50,
-                containLabel: true
-            },
+            grid: this.getResponsiveGridOptions(),
             xAxis: {
                 type: 'category',
                 data: data.members,
                 axisLine: { lineStyle: { color: '#E5E7EB' } },
-                axisLabel: { color: '#6B7280', fontSize: 10, rotate: 45 }
+                axisLabel: { color: '#6B7280', fontSize: isMobile ? 8 : axisLabelOptions.fontSize, rotate: isMobile ? 45 : axisLabelOptions.rotate }
             },
             yAxis: {
                 type: 'value',

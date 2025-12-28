@@ -68,6 +68,13 @@ const TransactionManager = {
                     option.textContent = member.name;
                     select.appendChild(option);
                 });
+                
+                // Refresh virtual-select if available
+                if (typeof window.VirtualSelect !== 'undefined') {
+                    setTimeout(() => {
+                        window.VirtualSelect.init({ el: '#transactionMemberSelect' });
+                    }, 0);
+                }
             }
         } catch (error) {
             console.error('Error loading members:', error);

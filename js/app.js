@@ -1,8 +1,13 @@
 // Main Application Module
 
 const App = {
-      // Store photo data globally to ensure it persists
-      _currentPhotoData: null,
+      // SVG Icons
+      icons: {
+            search: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em"><path d="M18.031 16.6168L22.3137 20.8995L20.8995 22.3137L16.6168 18.031C15.0769 19.263 13.124 20 11 20C6.032 20 2 15.968 2 11C2 6.032 6.032 2 11 2C15.968 2 20 6.032 20 11C20 13.124 19.263 15.0769 18.031 16.6168ZM16.0247 15.8748C17.2475 14.6146 18 12.8956 18 11C18 7.1325 14.8675 4 11 4C7.1325 4 4 7.1325 4 11C4 14.8675 7.1325 18 11 18C12.8956 18 14.6146 17.2475 15.8748 16.0247L16.0247 15.8748Z"></path></svg>',
+            edit: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em"><path d="M16.7574 2.99678L14.7574 4.99678H5V18.9968H19V9.23943L21 7.23943V19.9968C21 20.5491 20.5523 20.9968 20 20.9968H4C3.44772 20.9968 3 20.5491 3 19.9968V3.99678C3 3.4445 3.44772 2.99678 4 2.99678H16.7574ZM20.4853 2.09729L21.8995 3.5115L12.7071 12.7039L11.2954 12.7064L11.2929 11.2897L20.4853 2.09729Z"></path></svg>',
+            delete: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em"><path d="M17 6H22V8H20V21C20 21.5523 19.5523 22 19 22H5C4.44772 22 4 21.5523 4 21V8H2V6H7V3C7 2.44772 7.44772 2 8 2H16C16.5523 2 17 2.44772 17 3V6ZM18 8H6V20H18V8ZM9 11H11V17H9V11ZM13 11H15V17H13V11ZM9 4V6H15V4H9Z"></path></svg>',
+            view: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em"><path d="M12.0003 3C17.3924 3 21.8784 6.87976 22.8189 12C21.8784 17.1202 17.3924 21 12.0003 21C6.60812 21 2.12215 17.1202 1.18164 12C2.12215 6.87976 6.60812 3 12.0003 3ZM12.0003 19C16.2359 19 19.8603 16.052 20.7777 12C19.8603 7.94803 16.2359 5 12.0003 5C7.7646 5 4.14022 7.94803 3.22278 12C4.14022 16.052 7.7646 19 12.0003 19ZM12.0003 16.5C9.51498 16.5 7.50026 14.4853 7.50026 12C7.50026 9.51472 9.51498 7.5 12.0003 7.5C14.4855 7.5 16.5003 9.51472 16.5003 12C16.5003 14.4853 14.4855 16.5 12.0003 16.5ZM12.0003 14.5C13.381 14.5 14.5003 13.3807 14.5003 12C14.5003 10.6193 13.381 9.5 12.0003 9.5C10.6196 9.5 9.50026 10.6193 9.50026 12C9.50026 13.3807 10.6196 14.5 12.0003 14.5Z"></path></svg>'
+      },
 
       async init() {
             await this.setupEventListeners();
@@ -149,10 +154,42 @@ const App = {
         // Audit log button
         const auditBtn = document.getElementById('auditBtn');
         if (auditBtn) {
-            auditBtn.addEventListener('click', () => {
-                this.showAuditLog();
+            auditBtn.addEventListener('click', async () => {
+                await this.showAuditLog();
             });
         }
+
+        // View toggle buttons for members page
+        const cardViewBtn = document.getElementById('cardViewBtn');
+        const tableViewBtn = document.getElementById('tableViewBtn');
+        
+        if (cardViewBtn) {
+            cardViewBtn.addEventListener('click', async () => {
+                document.querySelectorAll('.view-btn').forEach(btn => btn.classList.remove('active'));
+                cardViewBtn.classList.add('active');
+                localStorage.setItem('memberViewMode', 'card');
+                await UI.refreshMembers();
+            });
+        }
+        
+        if (tableViewBtn) {
+            tableViewBtn.addEventListener('click', async () => {
+                document.querySelectorAll('.view-btn').forEach(btn => btn.classList.remove('active'));
+                tableViewBtn.classList.add('active');
+                localStorage.setItem('memberViewMode', 'table');
+                await UI.refreshMembers();
+            });
+        }
+        
+        // Restore view mode preference
+        const savedViewMode = localStorage.getItem('memberViewMode') || 'card';
+        document.querySelectorAll('.view-btn').forEach(btn => {
+            if (btn.dataset.view === savedViewMode) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
 
         // Roles button - removed with role-based access
 
@@ -378,254 +415,7 @@ const App = {
         }
     },
 
-    // Preview member photo with compression
-    previewMemberPhoto(event) {
-        const file = event.target.files[0];
-        const viewBtn = document.getElementById('viewPhotoBtn');
-        const uploadHint = document.getElementById('photoUploadHint');
-        
-        if (file) {
-            // Validate file type
-            if (!file.type.startsWith('image/')) {
-                UI.showAlert('Please select a valid image file', 'warning');
-                event.target.value = '';
-                viewBtn.style.display = 'none';
-                uploadHint.style.display = 'flex';
-                this._currentPhotoData = null;
-                return;
-            }
-            
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const img = new Image();
-                img.onload = () => {
-                    // Compress image to max 300KB
-                    this.compressImage(img, (compressedDataUrl) => {
-                        // Store compressed data globally and in dataset
-                        this._currentPhotoData = compressedDataUrl;
-                        event.target.dataset.compressedImage = compressedDataUrl;
-                        // Store in modal
-                        const modalImg = document.getElementById('modalPhotoPreview');
-                        if (modalImg) {
-                            modalImg.src = compressedDataUrl;
-                        }
-                        // Show view button and hide hint
-                        viewBtn.style.display = 'block';
-                        uploadHint.style.display = 'none';
-                        console.log('Photo preview loaded, size:', (compressedDataUrl.length / 1024).toFixed(2), 'KB');
-                    });
-                };
-                img.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
-        } else {
-            viewBtn.style.display = 'none';
-            uploadHint.style.display = 'flex';
-            this._currentPhotoData = null;
-            if (event.target) {
-                delete event.target.dataset.compressedImage;
-            }
-        }
-    },
 
-    // Preview update member photo
-    previewUpdateMemberPhoto(event) {
-         const file = event.target.files[0];
-         const displayDiv = document.getElementById('updatePhotoDisplay');
-         
-         if (file) {
-             // Validate file type
-             if (!file.type.startsWith('image/')) {
-                 UI.showAlert('Please select a valid image file', 'warning');
-                 event.target.value = '';
-                 return;
-             }
-             
-             const reader = new FileReader();
-             reader.onload = (e) => {
-                 const img = new Image();
-                 img.onload = () => {
-                     // Compress image
-                     this.compressImage(img, (compressedDataUrl) => {
-                         this._updatePhotoData = compressedDataUrl;
-                         // Also store in window for safety
-                         window._saccoUpdatePhotoData = compressedDataUrl;
-                         // Display preview
-                         displayDiv.innerHTML = `<img src="${compressedDataUrl}" alt="Preview" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">`;
-                         
-                         // Show larger preview modal
-                         this.showUpdatePhotoPreview(compressedDataUrl, file.name);
-                         console.log('Update photo preview loaded, size:', (compressedDataUrl.length / 1024).toFixed(2), 'KB');
-                     });
-                 };
-                 img.src = e.target.result;
-             };
-             reader.readAsDataURL(file);
-         }
-     },
-
-    // Show larger photo preview modal for update
-    showUpdatePhotoPreview(photoDataUrl, fileName) {
-        const modalHtml = `
-            <div style="text-align: center; padding: 1rem;">
-                <p style="margin-bottom: 1rem; color: #6c757d; font-size: 0.9rem;">
-                    <i class="ri-file-image-line"></i> ${fileName}
-                </p>
-                <img src="${photoDataUrl}" alt="Preview" style="max-width: 100%; max-height: 400px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: block; margin: 0 auto;">
-                <p style="margin-top: 1rem; color: #6c757d; font-size: 0.85rem;">
-                    ✓ Image compressed and ready to upload
-                </p>
-            </div>
-        `;
-        
-        Swal.fire({
-            title: 'Photo Preview',
-            html: modalHtml,
-            icon: 'info',
-            confirmButtonText: 'Looks Good',
-            confirmButtonColor: '#2563eb',
-            width: '500px'
-        });
-    },
-
-    // Show current photo preview (existing photo during update)
-    showCurrentUpdatePhotoPreview() {
-        const member = this._currentUpdateMember;
-        const updatePhotoData = this._updatePhotoData;
-        
-        if (!member && !updatePhotoData) return;
-        
-        // Use new photo if available, otherwise use existing
-        const photoUrl = updatePhotoData || member?.photo;
-        const title = updatePhotoData ? 'New Photo Preview' : 'Current Photo';
-        const subtitle = updatePhotoData ? '✓ New photo ready to upload' : 'Current member photo';
-        
-        if (!photoUrl) {
-            UI.showAlert('No photo available to preview', 'info');
-            return;
-        }
-        
-        const modalHtml = `
-            <div style="text-align: center; padding: 1rem;">
-                <p style="margin-bottom: 1rem; color: #6c757d; font-size: 0.9rem;">
-                    ${subtitle}
-                </p>
-                <img src="${photoUrl}" alt="Photo Preview" style="max-width: 100%; max-height: 450px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: block; margin: 0 auto;">
-            </div>
-        `;
-        
-        Swal.fire({
-            title: title,
-            html: modalHtml,
-            icon: 'info',
-            confirmButtonText: 'OK',
-            confirmButtonColor: '#2563eb',
-            width: '600px'
-        });
-    },
-
-    // Remove update member photo
-    removeUpdateMemberPhoto() {
-        const member = this._currentUpdateMember;
-        if (!member) return;
-        
-        this._updatePhotoData = null;
-        
-        // Reset display to initials or original photo
-        const displayDiv = document.getElementById('updatePhotoDisplay');
-        if (member.photo) {
-            displayDiv.innerHTML = `<img src="${member.photo}" alt="${member.name}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">`;
-        } else {
-            const initials = this.getInitials(member.name);
-            const bgColor = this.getAvatarColor(member.name);
-            displayDiv.innerHTML = `<div style="width: 100%; height: 100%; background: ${bgColor}; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 1.5rem;">${initials}</div>`;
-        }
-        
-        // Clear file input
-        const fileInput = document.getElementById('updateMemberPhoto');
-        if (fileInput) {
-            fileInput.value = '';
-        }
-        
-        // Show undo message
-        UI.showAlert('Photo change cancelled', 'info');
-    },
-
-    // View photo in modal
-    viewPhotoModal() {
-        const modal = new bootstrap.Modal(document.getElementById('photoPreviewModal'));
-        modal.show();
-    },
-
-    // Remove member photo
-    removeMemberPhoto() {
-        const photoInput = document.getElementById('memberPhoto');
-        const viewBtn = document.getElementById('viewPhotoBtn');
-        const uploadHint = document.getElementById('photoUploadHint');
-        const modal = bootstrap.Modal.getInstance(document.getElementById('photoPreviewModal'));
-        
-        // Clear the file input
-        photoInput.value = '';
-        
-        // Hide view button and show hint
-        viewBtn.style.display = 'none';
-        uploadHint.style.display = 'flex';
-        
-        // Clear stored compressed image
-        delete photoInput.dataset.compressedImage;
-        this._currentPhotoData = null;
-        
-        // Close modal
-        if (modal) {
-            modal.hide();
-        }
-        
-        UI.showAlert('Photo removed successfully', 'success');
-    },
-
-    // Compress image to max 300KB
-    compressImage(img, callback) {
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        
-        let width = img.width;
-        let height = img.height;
-        let quality = 0.9;
-        
-        // Set initial canvas size
-        canvas.width = width;
-        canvas.height = height;
-        
-        // Draw image
-        ctx.drawImage(img, 0, 0);
-        
-        // Compress by reducing quality
-        let compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
-        let sizeInKB = (compressedDataUrl.length / 1024);
-        
-        // Iteratively reduce quality until under 300KB
-        while (sizeInKB > 300 && quality > 0.1) {
-            quality -= 0.1;
-            compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
-            sizeInKB = (compressedDataUrl.length / 1024);
-        }
-        
-        // If still too large, reduce dimensions
-        if (sizeInKB > 300) {
-            const scale = Math.sqrt(300 / sizeInKB);
-            const newWidth = Math.floor(width * scale);
-            const newHeight = Math.floor(height * scale);
-            
-            canvas.width = newWidth;
-            canvas.height = newHeight;
-            ctx.drawImage(img, 0, 0, newWidth, newHeight);
-            
-            quality = 0.8;
-            compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
-        }
-        
-        callback(compressedDataUrl);
-    },
 
     // Generate initials from name for avatar placeholder
     getInitials(name) {
@@ -646,19 +436,15 @@ const App = {
         return colors[hash % colors.length];
     },
 
-    // Get avatar HTML (photo or initials) - for card views
+    // Get avatar HTML (initials only) - for card views
     getAvatarHtml(member, size = 'md') {
-        const initials = this.getInitials(member.name);
-        const containerSize = size === 'sm' ? '40px' : size === 'lg' ? '80px' : '56px';
-        const fontSize = size === 'sm' ? '0.75rem' : size === 'lg' ? '1.5rem' : '1rem';
-        
-        if (member.photo) {
-            return `<img src="${member.photo}" alt="${member.name}" style="width: 100%; height: 100%; object-fit: cover;">`;
-        }
-        
-        const bgColor = this.getAvatarColor(member.name);
-        return `<div style="width: ${containerSize}; height: ${containerSize}; background: ${bgColor}; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: ${fontSize}; flex-shrink: 0;">${initials}</div>`;
-    },
+         const initials = this.getInitials(member.name);
+         const containerSize = size === 'sm' ? '40px' : size === 'lg' ? '120px' : '56px';
+         const fontSize = size === 'sm' ? '0.75rem' : size === 'lg' ? '1.2rem' : '1rem';
+         
+         const bgColor = this.getAvatarColor(member.name);
+         return `<div style="width: ${containerSize}; height: ${containerSize}; background: ${bgColor}; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: ${fontSize}; flex-shrink: 0; border: 3px solid rgba(255, 255, 255, 0.3);">${initials}</div>`;
+     },
 
     // Member operations
     async addMember() {
@@ -736,8 +522,6 @@ const App = {
               }
               
               UI.clearForm('memberForm');
-              document.getElementById('viewPhotoBtn').style.display = 'none';
-              document.getElementById('photoUploadHint').style.display = 'flex';
               // Clear photo data
               this._currentPhotoData = null;
                await this.generateMemberId();
@@ -809,21 +593,6 @@ const App = {
              title: 'Update Member Information',
              html: `
                  <div class="text-start">
-                     <div class="mb-3" style="text-align: center;">
-                         <div style="width: 80px; height: 80px; margin: 0 auto 1rem; border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center; background: #f0f0f0; border: 2px solid #ddd; cursor: pointer; transition: all 0.3s ease;" id="updatePhotoContainer" onclick="App.showCurrentUpdatePhotoPreview()">
-                             <div id="updatePhotoDisplay" style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
-                                 ${photoHtml}
-                             </div>
-                         </div>
-                         <p style="margin-top: 0.5rem; font-size: 0.85rem; color: #6c757d; cursor: pointer;" onclick="document.getElementById('updateMemberPhoto').click()">
-                             <i class="ri-image-edit-line"></i> Click photo to view or change
-                         </p>
-                         <label for="updateMemberPhoto" class="form-label" style="cursor: pointer; margin-top: 0.5rem;">
-                             <span style="color: #0d6efd; text-decoration: underline;">Choose New Photo</span>
-                         </label>
-                         <input type="file" class="form-control" id="updateMemberPhoto" accept="image/*" style="display: none;" onchange="App.previewUpdateMemberPhoto(event)">
-                         ${member.photo ? `<button type="button" class="btn btn-sm btn-danger mt-2" id="removeUpdatePhotoBtn" onclick="App.removeUpdateMemberPhoto()"><i class="ri-delete-bin-line"></i> Remove Photo</button>` : ''}
-                     </div>
                      <div class="mb-3">
                          <label for="updateMemberName" class="form-label">Full Name</label>
                          <input type="text" class="form-control" id="updateMemberName" value="${member.name}">
@@ -850,24 +619,6 @@ const App = {
              cancelButtonText: 'Cancel',
              didOpen: () => {
                  console.log('Update modal opened');
-                 // Store member reference for photo operations
-                 this._currentUpdateMemberId = id;
-                 this._currentUpdateMember = member;
-                 
-                 // Attach file input handler
-                 const fileInput = document.getElementById('updateMemberPhoto');
-                 if (fileInput) {
-                     console.log('File input found, attaching listener');
-                     // Remove any previous listeners and add new one
-                     fileInput.removeEventListener('change', this._updatePhotoHandler);
-                     this._updatePhotoHandler = (e) => {
-                         console.log('File selected:', e.target.files[0]?.name);
-                         this.previewUpdateMemberPhoto(e);
-                     };
-                     fileInput.addEventListener('change', this._updatePhotoHandler);
-                 } else {
-                     console.warn('File input not found!');
-                 }
              }
          }).then(async (result) => {
              if (result.isConfirmed) {
@@ -970,14 +721,21 @@ const App = {
         }
 
         try {
-            // Verify member exists
-            const member = await Storage.getMemberById(memberId);
-            if (!member) {
-                UI.showAlert('Selected member not found', 'error');
-                return;
-            }
+             // Verify member exists
+             const member = await Storage.getMemberById(memberId);
+             if (!member) {
+                 UI.showAlert('Selected member not found', 'error');
+                 return;
+             }
 
-            // Calculate due date
+             // Check if loan amount exceeds total savings
+             const totalSavings = await Storage.getTotalSavingsByMemberId(memberId);
+             if (amount > totalSavings) {
+                 UI.showAlert(`Loan amount (UGX ${amount.toLocaleString()}) cannot exceed member's total savings (UGX ${totalSavings.toLocaleString()})`, 'warning');
+                 return;
+             }
+
+             // Calculate due date
             const startDate = new Date(loanDate);
             const dueDate = new Date(startDate);
             dueDate.setMonth(dueDate.getMonth() + term);
@@ -1727,8 +1485,8 @@ const App = {
      },
 
     // Show audit log
-    showAuditLog() {
-        const auditLog = Storage.getAuditLog().slice().reverse();
+    async showAuditLog() {
+        const auditLog = (await Storage.getAuditLog()).slice().reverse();
 
         let html = `
             <div style="max-height: 500px; overflow-y: auto; text-align: left;">

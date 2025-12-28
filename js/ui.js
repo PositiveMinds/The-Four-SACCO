@@ -152,8 +152,15 @@ const UI = {
             filterSelect.innerHTML = '<option value="">All Members</option>' +
                 uniqueMembers.map(m => `<option value="${m}">${m}</option>`).join('');
             filterSelect.value = currentValue;
-        }
-        },
+            
+            // Refresh virtual-select if available
+             if (typeof window.VirtualSelect !== 'undefined') {
+                 setTimeout(() => {
+                     window.VirtualSelect.init({ el: '#activityMemberFilter' });
+                 }, 0);
+             }
+            }
+            },
 
     renderRecentActivity() {
         const end = this.currentActivityPage * this.activityPageSize;
@@ -331,13 +338,16 @@ const UI = {
      },
 
     renderMembersAsCards(members, container) {
-         container.className = 'row g-4';
-         container.innerHTML = members.map(member => `
-             <div class="col-md-6 col-lg-4">
-                 <div class="card member-card h-100">
+        container.className = 'members-flex';
+        container.style.display = 'flex';
+        container.style.flexWrap = 'wrap';
+       container.style.gap = '1rem';
+        container.innerHTML = members.map(member => `
+            <div style="flex: 0 0 300px;">
+                  <div class="card member-card h-100 p-0">
                      <!-- Card Header with Avatar and Actions -->
-                     <div class="member-card-header-section" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 1.5rem 1.5rem; margin: -1px -1px 0 -1px; border-radius: 12px 12px 0 0;">
-                         <div style="display: flex; flex-direction: column; align-items: center; gap: 1rem;">
+                     <div class="member-card-header-section" style="position: relative; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); margin: -1px -1px 0 -1px; border-radius: 12px 12px 0 0; width: calc(100% + 2px);">
+                         <div style="display: flex; flex-direction: column; align-items: center; gap: 1rem; padding: 1.5rem 1.5rem;">
                              <div class="member-avatar">
                                  ${App.getAvatarHtml(member, 'lg')}
                              </div>
@@ -348,26 +358,26 @@ const UI = {
                          </div>
                          <div class="member-card-actions" style="position: absolute; top: 1rem; right: 1rem;">
                              <div class="dropdown">
-                                 <button class="btn btn-sm btn-icon" type="button" id="memberDropdown-${member.id}" data-bs-toggle="dropdown" aria-expanded="false" title="Actions" style="background: rgba(255,255,255,0.2); border: none; color: white;">
-                                     <i class="ri-more-2-line"></i>
+                                 <button class="btn btn-sm btn-icon" type="button" id="memberDropdown-${member.id}" data-bs-toggle="dropdown" aria-expanded="false" title="Actions" style="background: rgba(255,255,255,0.2); border: none; color: white; width: 2.5rem; height: 2.5rem; display: flex; align-items: center; justify-content: center; padding: 0;">
+                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width: 1.2rem; height: 1.2rem;"><path d="M12 3C10.9 3 10 3.9 10 5C10 6.1 10.9 7 12 7C13.1 7 14 6.1 14 5C14 3.9 13.1 3 12 3ZM12 17C10.9 17 10 17.9 10 19C10 20.1 10.9 21 12 21C13.1 21 14 20.1 14 19C14 17.9 13.1 17 12 17ZM12 10C10.9 10 10 10.9 10 12C10 13.1 10.9 14 12 14C13.1 14 14 13.1 14 12C14 10.9 13.1 10 12 10Z"></path></svg>
                                  </button>
                                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="memberDropdown-${member.id}">
-                                     <li><a class="dropdown-item" href="#" onclick="App.updateMember('${member.id}'); return false;"><i class="ri-edit-line"></i> Update Info</a></li>
+                                     <li><a class="dropdown-item" href="#" onclick="App.updateMember('${member.id}'); return false;">${App.icons.edit} Update Info</a></li>
                                      <li><hr class="dropdown-divider"></li>
-                                     <li><a class="dropdown-item text-danger" href="#" onclick="App.deleteMember('${member.id}'); return false;"><i class="ri-delete-bin-line"></i> Delete</a></li>
+                                     <li><a class="dropdown-item text-danger" href="#" onclick="App.deleteMember('${member.id}'); return false;">${App.icons.delete} Delete</a></li>
                                  </ul>
                              </div>
                          </div>
                      </div>
 
                      <!-- Card Body with Contact Information -->
-                     <div class="card-body pt-0">
+                     <div class="card-body p-3">
                          <div class="member-card-divider mb-3"></div>
                          <div class="member-card-info">
                              <!-- ID Card -->
                              <div class="member-info-row">
                                  <div class="info-icon">
-                                     <i class="ri-id-card-line"></i>
+                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width: 1.25rem; height: 1.25rem;"><path d="M4 22C4 17.5817 7.58172 14 12 14C16.4183 14 20 17.5817 20 22H18C18 18.6863 15.3137 16 12 16C8.68629 16 6 18.6863 6 22H4ZM12 13C8.685 13 6 10.315 6 7C6 3.685 8.685 1 12 1C15.315 1 18 3.685 18 7C18 10.315 15.315 13 12 13ZM12 11C14.21 11 16 9.21 16 7C16 4.79 14.21 3 12 3C9.79 3 8 4.79 8 7C8 9.21 9.79 11 12 11Z"></path></svg>
                                  </div>
                                  <div class="info-content">
                                      <span class="info-label">Member ID</span>
@@ -378,7 +388,7 @@ const UI = {
                              <!-- Email -->
                              <div class="member-info-row">
                                  <div class="info-icon">
-                                     <i class="ri-mail-line"></i>
+                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width: 1.25rem; height: 1.25rem;"><path d="M3 3H21C21.5523 3 22 3.44772 22 4V20C22 20.5523 21.5523 21 21 21H3C2.44772 21 2 20.5523 2 20V4C2 3.44772 2.44772 3 3 3ZM20 7.23792L12.0718 14.338L4 7.21594V19H20V7.23792ZM4.51146 5L12.0619 11.662L19.501 5H4.51146Z"></path></svg>
                                  </div>
                                  <div class="info-content">
                                      <span class="info-label">Email</span>
@@ -389,7 +399,7 @@ const UI = {
                              <!-- Phone -->
                              <div class="member-info-row">
                                  <div class="info-icon">
-                                     <i class="ri-phone-line"></i>
+                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width: 1.25rem; height: 1.25rem;"><path d="M9.36556 10.6821C10.302 12.3288 11.6712 13.698 13.3179 14.6344L14.2024 13.3961C14.4965 12.9845 15.0516 12.8573 15.4956 13.0998C16.9024 13.8683 18.4571 14.3353 20.0789 14.4637C20.599 14.5049 21 14.9389 21 15.4606V19.9234C21 20.4361 20.6122 20.8657 20.1022 20.9181C19.5723 20.9726 19.0377 21 18.5 21C9.93959 21 3 14.0604 3 5.5C3 4.96227 3.02742 4.42771 3.08189 3.89776C3.1343 3.38775 3.56394 3 4.07665 3H8.53942C9.0611 3 9.49513 3.40104 9.5363 3.92109C9.66467 5.54288 10.1317 7.09764 10.9002 8.50444C11.1427 8.9484 11.0155 9.50354 10.6039 9.79757L9.36556 10.6821ZM6.84425 10.0252L8.7442 8.66809C8.20547 7.50514 7.83628 6.27183 7.64727 5H5.00907C5.00303 5.16632 5 5.333 5 5.5C5 12.9558 11.0442 19 18.5 19C18.667 19 18.8337 18.997 19 18.9909V16.3527C17.7282 16.1637 16.4949 15.7945 15.3319 15.2558L13.9748 17.1558C13.4258 16.9425 12.8956 16.6915 12.3874 16.4061L12.3293 16.373C10.3697 15.2587 8.74134 13.6303 7.627 11.6707L7.59394 11.6126C7.30849 11.1044 7.05754 10.5742 6.84425 10.0252Z"></path></svg>
                                  </div>
                                  <div class="info-content">
                                      <span class="info-label">Phone</span>
@@ -400,7 +410,7 @@ const UI = {
                              <!-- Joined Date -->
                              <div class="member-info-row">
                                  <div class="info-icon">
-                                     <i class="ri-calendar-2-line"></i>
+                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width: 1.25rem; height: 1.25rem;"><path d="M9 1V3H15V1H17V3H21C21.5523 3 22 3.44772 22 4V20C22 20.5523 21.5523 21 21 21H3C2.44772 21 2 20.5523 2 20V4C2 3.44772 2.44772 3 3 3H7V1H9ZM20 11H4V19H20V11ZM8 13V15H6V13H8ZM13 13V15H11V13H13ZM18 13V15H16V13H18ZM7 5H4V9H20V5H17V7H15V5H9V7H7V5Z"></path></svg>
                                  </div>
                                  <div class="info-content">
                                      <span class="info-label">Member Since</span>
@@ -451,13 +461,13 @@ const UI = {
                                  <td style="vertical-align: middle;"><small>${new Date(member.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</small></td>
                                  <td style="text-align: center; vertical-align: middle; padding: 12px 8px;">
                                      <div class="dropdown">
-                                         <button class="btn btn-sm btn-outline-secondary" type="button" id="memberDropdownTable-${member.id}" data-bs-toggle="dropdown" aria-expanded="false" title="Actions" style="padding: 0.35rem 0.5rem;">
-                                             <i class="ri-more-2-fill"></i>
-                                         </button>
+                                          <button class="btn btn-sm btn-outline-secondary" type="button" id="memberDropdownTable-${member.id}" data-bs-toggle="dropdown" aria-expanded="false" title="Actions" style="padding: 0.35rem 0.5rem;">
+                                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width: 1rem; height: 1rem; vertical-align: -2px;"><path d="M12 3C10.9 3 10 3.9 10 5C10 6.1 10.9 7 12 7C13.1 7 14 6.1 14 5C14 3.9 13.1 3 12 3ZM12 17C10.9 17 10 17.9 10 19C10 20.1 10.9 21 12 21C13.1 21 14 20.1 14 19C14 17.9 13.1 17 12 17ZM12 10C10.9 10 10 10.9 10 12C10 13.1 10.9 14 12 14C13.1 14 14 13.1 14 12C14 10.9 13.1 10 12 10Z"></path></svg>
+                                          </button>
                                          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="memberDropdownTable-${member.id}">
-                                             <li><a class="dropdown-item" href="#" onclick="App.updateMember('${member.id}'); return false;"><i class="ri-edit-line"></i> Update</a></li>
+                                             <li><a class="dropdown-item" href="#" onclick="App.updateMember('${member.id}'); return false;">${App.icons.edit} Update</a></li>
                                               <li><hr class="dropdown-divider"></li>
-                                              <li><a class="dropdown-item text-danger" href="#" onclick="App.deleteMember('${member.id}'); return false;"><i class="ri-delete-bin-line"></i> Delete</a></li>
+                                              <li><a class="dropdown-item text-danger" href="#" onclick="App.deleteMember('${member.id}'); return false;">${App.icons.delete} Delete</a></li>
                                          </ul>
                                      </div>
                                  </td>
@@ -481,11 +491,18 @@ const UI = {
                 select.innerHTML = '<option value="">Select Member</option>' +
                     members.map(m => `<option value="${m.id}">${(m.name || '').trim()}</option>`).join('');
                 select.value = currentValue;
-            }
-        });
-    },
+                
+                // Refresh virtual-select if available
+                if (typeof window.VirtualSelect !== 'undefined') {
+                    setTimeout(() => {
+                        window.VirtualSelect.init({ el: '#' + selectId });
+                    }, 0);
+                }
+                }
+                });
+                },
 
-    // Loans refresh
+                // Loans refresh
     allLoans: [],
     currentLoansPage: 1,
     loansPageSize: 5,
@@ -532,12 +549,12 @@ const UI = {
             const totalAmount = loan.amount + totalInterest;
             const monthlyInstallment = totalAmount / loan.term;
 
-            let actions = `<button class="btn btn-secondary btn-sm icon-btn" title="View Details" onclick="App.viewLoanDetails('${loan.id}')"><i class="ri-eye-line"></i></button>`;
+            let actions = `<button class="btn btn-secondary btn-sm icon-btn" title="View Details" onclick="App.viewLoanDetails('${loan.id}')">${App.icons.view}</button>`;
             if (isOverdue) {
                 actions += ` <button class="btn btn-warning btn-sm icon-btn" title="Apply Penalty" onclick="App.applyPenalty('${loan.id}')"><i class="ri-alert-line"></i></button>`;
             }
-            actions += ` <button class="btn btn-info btn-sm icon-btn" title="Edit Loan" onclick="App.editLoan('${loan.id}')"><i class="ri-edit-line"></i></button>`;
-            actions += ` <button class="btn btn-danger btn-sm icon-btn" title="Delete Loan" onclick="App.deleteLoan('${loan.id}')"><i class="ri-delete-bin-line"></i></button>`;
+            actions += ` <button class="btn btn-info btn-sm icon-btn" title="Edit Loan" onclick="App.editLoan('${loan.id}')">${App.icons.edit}</button>`;
+            actions += ` <button class="btn btn-danger btn-sm icon-btn" title="Delete Loan" onclick="App.deleteLoan('${loan.id}')">${App.icons.delete}</button>`;
 
             return `
                 <tr>
@@ -603,10 +620,17 @@ const UI = {
                  }));
              select.innerHTML = '<option value="">Select Loan</option>' + options.join('');
              select.value = currentValue;
-        }
-    },
+             
+             // Refresh virtual-select if available
+             if (typeof window.VirtualSelect !== 'undefined') {
+                 setTimeout(() => {
+                     window.VirtualSelect.init({ el: '#paymentLoan' });
+                 }, 0);
+             }
+             }
+             },
 
-    // Payments refresh
+             // Payments refresh
     allPayments: [],
     currentPaymentsPage: 1,
     paymentsPageSize: 5,
@@ -1197,12 +1221,12 @@ const UI = {
             const totalAmount = loan.amount + totalInterest;
             const monthlyInstallment = totalAmount / loan.term;
 
-            let filterActions = `<button class="btn btn-secondary btn-sm icon-btn" title="View Details" onclick="App.viewLoanDetails('${loan.id}')"><i class="ri-eye-line"></i></button>`;
+            let filterActions = `<button class="btn btn-secondary btn-sm icon-btn" title="View Details" onclick="App.viewLoanDetails('${loan.id}')">${App.icons.view}</button>`;
             if (isOverdue) {
                 filterActions += ` <button class="btn btn-warning btn-sm icon-btn" title="Apply Penalty" onclick="App.applyPenalty('${loan.id}')"><i class="ri-alert-line"></i></button>`;
             }
-            filterActions += ` <button class="btn btn-info btn-sm icon-btn" title="Edit Loan" onclick="App.editLoan('${loan.id}')"><i class="ri-edit-line"></i></button>`;
-            filterActions += ` <button class="btn btn-danger btn-sm icon-btn" title="Delete Loan" onclick="App.deleteLoan('${loan.id}')"><i class="ri-delete-bin-line"></i></button>`;
+            filterActions += ` <button class="btn btn-info btn-sm icon-btn" title="Edit Loan" onclick="App.editLoan('${loan.id}')">${App.icons.edit}</button>`;
+            filterActions += ` <button class="btn btn-danger btn-sm icon-btn" title="Delete Loan" onclick="App.deleteLoan('${loan.id}')">${App.icons.delete}</button>`;
 
             return `
                 <tr>

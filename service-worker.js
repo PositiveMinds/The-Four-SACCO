@@ -1,83 +1,95 @@
-const CACHE_NAME = 'sacco-v3';
-const RUNTIME_CACHE = 'sacco-runtime';
+const CACHE_NAME = 'sacco-v4';
+const RUNTIME_CACHE = 'sacco-runtime-v4';
 const ASSETS_TO_CACHE = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/browserconfig.xml',
+  './',
+  './index.html',
+  './manifest.json',
+  './browserconfig.xml',
   
   // CSS Files - Complete
-  '/css/style.css',
-  '/css/theme.css',
-  '/css/remixicon.css',
-  '/css/offline-icons.css',
-  '/css/framework.css',
+  './css/style.css',
+  './css/theme.css',
+  './css/remixicon.css',
+  './css/offline-icons.css',
+  './css/framework.css',
+  './css/advanced-charts.css',
+  './css/form-enhanced.css',
+  './css/select2-custom.css',
 
   // JavaScript Files - All 25 Files
-  '/js/ai-dashboard.js',
-  '/js/ai-engine.js',
-  '/js/analytics-logger.js',
-  '/js/analytics.js',
-  '/js/app.js',
-  '/js/custom-notifications.js',
-  '/js/device-support.js',
-  '/js/excel-styling.js',
-  '/js/export.js',
-  '/js/indexeddb.js',
-  '/js/jspdf-loader.js',
-  '/js/loan-member-fix.js',
-  '/js/notifications.js',
-  '/js/offline-excel-generator.js',
-  '/js/offline-pdf-generator.js',
-  '/js/offline-resources.js',
-  '/js/profit-chart.js',
-  '/js/pwa-checker.js',
-  '/js/pwa-install.js',
-  '/js/receipts.js',
-  '/js/sidebar-features.js',
-  '/js/storage.js',
-  '/js/sweetalert-integration.js',
-  '/js/transactions.js',
-  '/js/ui.js',
+  './js/ai-dashboard.js',
+  './js/ai-engine.js',
+  './js/analytics-logger.js',
+  './js/analytics.js',
+  './js/app.js',
+  './js/custom-notifications.js',
+  './js/device-support.js',
+  './js/excel-styling.js',
+  './js/export.js',
+  './js/indexeddb.js',
+  './js/jspdf-loader.js',
+  './js/loan-member-fix.js',
+  './js/notifications.js',
+  './js/offline-excel-generator.js',
+  './js/offline-pdf-generator.js',
+  './js/offline-resources.js',
+  './js/profit-chart.js',
+  './js/pwa-checker.js',
+  './js/pwa-install.js',
+  './js/receipts.js',
+  './js/sidebar-features.js',
+  './js/storage.js',
+  './js/sweetalert-integration.js',
+  './js/transactions.js',
+  './js/ui.js',
+  './js/bootstrap-select-init.js',
+  './js/select2-init.js',
+  './js/virtual-select-init.js',
   
   // Images - All sizes (Complete List)
-  '/images/16x16.png',
-  '/images/32x32.png',
-  '/images/64x64.png',
-  '/images/144x144.png',
-  '/images/180x180.png',
-  '/images/image-192.png',
-  '/images/image-384.png',
-  '/images/image-512.png',
+  './images/16x16.png',
+  './images/32x32.png',
+  './images/64x64.png',
+  './images/144x144.png',
+  './images/180x180.png',
+  './images/image-192.png',
+  './images/image-384.png',
+  './images/image-512.png',
   
   // Vendor - Bootstrap
-  '/vendor/bootstrap/css/bootstrap.min.css',
-  '/vendor/bootstrap/js/bootstrap.bundle.min.js',
+  './vendor/bootstrap/css/bootstrap.min.css',
+  './vendor/bootstrap/js/bootstrap.bundle.min.js',
+
+  // Vendor - jQuery (required by Select2)
+  './vendor/jquery/jquery-3.7.1.min.js',
+
+  // Vendor - Select2
+  './vendor/select2-develop/select2-develop/dist/css/select2.min.css',
+  './vendor/select2-develop/select2-develop/dist/js/select2.min.js',
 
   // Vendor - RemixIcon Fonts
-  '/vendor/RemixIcon/fonts/remixicon.css',
-  '/vendor/RemixIcon/fonts/remixicon.eot',
-  '/vendor/RemixIcon/fonts/remixicon.ttf',
-  '/vendor/RemixIcon/fonts/remixicon.woff',
-  '/vendor/RemixIcon/fonts/remixicon.woff2',
+  './vendor/RemixIcon/fonts/remixicon.css',
+  './vendor/RemixIcon/fonts/remixicon.eot',
+  './vendor/RemixIcon/fonts/remixicon.ttf',
+  './vendor/RemixIcon/fonts/remixicon.woff',
+  './vendor/RemixIcon/fonts/remixicon.woff2',
 
   // Vendor - jsPDF
-  '/vendor/jsPDF/jspdf.umd.js',
-  '/vendor/jsPDF/jspdf.plugin.autotable.min.js',
+  './vendor/jsPDF/jspdf.umd.js',
+  './vendor/jsPDF/jspdf.plugin.autotable.min.js',
 
   // Vendor - ECharts
-  '/vendor/echarts/dist/echarts.min.js',
+  './vendor/echarts/dist/echarts.min.js',
 
   // Vendor - SweetAlert2
-  '/vendor/sweetalert/dist/sweetalert2.all.min.js',
-  '/vendor/sweetalert/dist/sweetalert2.min.css',
-  '/vendor/sweetalert/dist/bootstrap-5.css',
+  './vendor/sweetalert/dist/sweetalert2.all.min.js',
+  './vendor/sweetalert/themes/bootstrap-5.css',
 
   // Vendor - SheetJS
-  '/vendor/sheetjs/xlsx.full.min.js',
+  './vendor/sheetjs/xlsx.full.min.js',
 
   // Vendor - QRCode
-  '/vendor/qrcodejs/qrcodejs.min.js',
+  './vendor/qrcodejs/qrcodejs.min.js',
 
   // External CSS Libraries (cached for offline)
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
@@ -200,8 +212,8 @@ async function syncData() {
 self.addEventListener('push', (event) => {
   const options = {
     body: event.data ? event.data.text() : 'New notification',
-    icon: '/images/image-192.png',
-    badge: '/images/image-192.png',
+    icon: './images/image-192.png',
+    badge: './images/image-192.png',
     vibrate: [100, 50, 100],
     tag: 'sacco-notification',
     requireInteraction: false

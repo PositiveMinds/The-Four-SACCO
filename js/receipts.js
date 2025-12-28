@@ -350,7 +350,7 @@ const ReceiptGenerator = {
         // Amount
         doc.setFont('helvetica', 'bold');
         doc.setFontSize(13);
-        doc.setTextColor(0, 120, 212);
+        doc.setTextColor(255, 204, 0);
         doc.text(amount, pageWidth - margin - 5, yPosition + 2, { align: 'right' });
         
         return yPosition + boxHeight + 8;
