@@ -141,6 +141,7 @@ const UI = {
             ]);
         
         this.allActivities = allActivities.sort((a, b) => b.date - a.date);
+        this.displayActivities = this.allActivities; // Initialize display activities
         this.currentActivityPage = 1;
         this.renderRecentActivity();
 
@@ -277,12 +278,13 @@ const UI = {
     },
 
     filterRecentActivity(memberName) {
+        console.log('Filtering activities by member:', memberName);
         this.currentActivityPage = 1;
         const tbody = document.getElementById('recentActivity');
 
         // Filter activities based on member selection
         let filteredActivities = this.allActivities;
-        if (memberName) {
+        if (memberName && memberName.trim() !== '') {
             filteredActivities = this.allActivities.filter(a => a.member === memberName);
         }
 
@@ -291,6 +293,8 @@ const UI = {
         
         const end = this.currentActivityPage * this.activityPageSize;
         const displayActivities = filteredActivities.slice(0, end);
+
+        console.log('Filtered activities count:', displayActivities.length);
 
         if (displayActivities.length === 0) {
             tbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted py-4">No activities found</td></tr>';
@@ -308,7 +312,7 @@ const UI = {
             // Update pagination with filtered data
             this.renderActivityPaginationFiltered(filteredActivities);
         }
-        },
+    },
 
     // Members refresh
     async refreshMembers() {

@@ -414,8 +414,14 @@ const App = {
          // Activity member filter
          const activityMemberFilter = document.getElementById('activityMemberFilter');
          if (activityMemberFilter) {
+             // Listen for both standard change and VirtualSelect change events
              activityMemberFilter.addEventListener('change', (e) => {
                  UI.filterRecentActivity(e.target.value);
+             });
+             
+             // Also listen for VirtualSelect's valueChange event
+             activityMemberFilter.addEventListener('valueChange', (e) => {
+                 UI.filterRecentActivity(e.detail);
              });
          }
         },
