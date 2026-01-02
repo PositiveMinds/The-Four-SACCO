@@ -220,7 +220,7 @@ self.addEventListener('push', (event) => {
   };
 
   event.waitUntil(
-    self.registration.showNotification('The Four - SACCO', options)
+    self.registration.showNotification('Together AS One - SACCO', options)
   );
 });
 

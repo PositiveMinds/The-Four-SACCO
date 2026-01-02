@@ -279,20 +279,61 @@ const UI = {
      membersPageSize: 5,
 
      async refreshMembersList() {
-         const members = await Storage.getMembers();
-        const container = document.getElementById('membersList');
-        const viewMode = document.querySelector('.view-btn.active')?.dataset.view || 'card';
+          const members = await Storage.getMembers();
+          const container = document.getElementById('membersList');
+          const viewMode = document.querySelector('.view-btn.active')?.dataset.view || 'card';
 
-        if (members.length === 0) {
-            container.innerHTML = '<div class="col-12"><p class="text-muted text-center">No members registered yet</p></div>';
-            document.getElementById('membersPagination').innerHTML = '';
-            return;
-        }
+          // Update member count pill
+          const memberCountPill = document.getElementById('memberCountPill');
+          if (memberCountPill) {
+              memberCountPill.textContent = members.length;
+              console.log('Member count updated to:', members.length);
+          } else {
+              console.warn('memberCountPill element not found');
+          }
 
-        this.allMembers = members;
-        this.currentMembersPage = 1;
-        this.renderMembersPage();
-     },
+          // Update metric cards
+          const totalMembersMetric = document.getElementById('totalMembersMetric');
+          const activeMembersMetric = document.getElementById('activeMembersMetric');
+          const inactiveMembersMetric = document.getElementById('inactiveMembersMetric');
+          const newMembersMetric = document.getElementById('newMembersMetric');
+
+          const totalCount = members.length;
+          if (totalMembersMetric) {
+              totalMembersMetric.textContent = totalCount;
+          }
+
+          // All members are considered active (no inactive status in system)
+          if (activeMembersMetric) {
+              activeMembersMetric.textContent = totalCount;
+          }
+
+          // No inactive members
+          if (inactiveMembersMetric) {
+              inactiveMembersMetric.textContent = '0';
+          }
+
+          // Count new members this month
+          const now = new Date();
+          const thisMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+          const newCount = members.filter(m => {
+              const joinDate = new Date(m.dateJoined || m.createdAt || new Date());
+              return joinDate >= thisMonth;
+          }).length;
+          if (newMembersMetric) {
+              newMembersMetric.textContent = newCount;
+          }
+
+          if (members.length === 0) {
+              container.innerHTML = '<div class="col-12"><p class="text-muted text-center">No members registered yet</p></div>';
+              document.getElementById('membersPagination').innerHTML = '';
+              return;
+          }
+
+          this.allMembers = members;
+          this.currentMembersPage = 1;
+          this.renderMembersPage();
+      },
 
      renderMembersPage() {
         const container = document.getElementById('membersList');

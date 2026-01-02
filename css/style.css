@@ -1487,12 +1487,40 @@ main {
 }
 
 /* Page Sections */
-.page {
+section.page {
     display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    overflow: hidden !important;
 }
 
-.page.active {
+section.page.active {
     display: block !important;
+    visibility: visible !important;
+    height: auto !important;
+    overflow: visible !important;
+}
+
+/* Hide transaction detail cards by default */
+#allTransactionsCard,
+#loansDetailsCard,
+#savingsDetailsCard {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Only show when transactions section is active */
+section#transactions.page.active #allTransactionsCard,
+section#transactions.page.active #loansDetailsCard,
+section#transactions.page.active #savingsDetailsCard {
+    display: block !important;
+    visibility: visible !important;
+    height: auto !important;
+    overflow: visible !important;
 }
 
 /* Footer */

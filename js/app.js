@@ -725,34 +725,54 @@ const App = {
      },
 
     // Loan operations
-    updateBorrowerOptions() {
+    async updateBorrowerOptions() {
         const borrowerType = document.getElementById('borrowerType').value;
+        const memberWrapper = document.getElementById('loanMemberWrapper');
+        const nonMemberWrapper = document.getElementById('nonMemberNameWrapper');
         const memberSelect = document.getElementById('loanMember');
         const nonMemberName = document.getElementById('nonMemberName');
         const loanType = document.getElementById('loanType');
 
         if (borrowerType === 'member') {
-            memberSelect.style.display = 'block';
+            memberWrapper.style.display = 'block';
             memberSelect.required = true;
-            nonMemberName.style.display = 'none';
+            nonMemberWrapper.style.display = 'none';
             nonMemberName.required = false;
+            nonMemberName.value = '';
+            
+            // Load members into dropdown
+            try {
+                const members = await Storage.getMembers();
+                if (members.length === 0) {
+                    memberSelect.innerHTML = '<option value="">No members registered</option>';
+                    console.warn('[Loan Form] No members found');
+                } else {
+                    memberSelect.innerHTML = '<option value="">Select Member</option>' +
+                        members.map(m => `<option value="${m.id}">${m.name}</option>`).join('');
+                    console.log('[Loan Form] Loaded ' + members.length + ' members into dropdown');
+                }
+            } catch (error) {
+                console.error('[Loan Form] Error loading members:', error);
+                memberSelect.innerHTML = '<option value="">Error loading members</option>';
+            }
             
             // Only show member loans
             loanType.innerHTML = `
                 <option value="" disabled selected>Select loan type...</option>
-                <option value="normal">Normal Loan (2%)</option>
-                <option value="emergency">Emergency Loan (5%)</option>
+                <option value="normal">Normal Loan</option>
+                <option value="emergency">Emergency Loan</option>
             `;
         } else if (borrowerType === 'non-member') {
-            memberSelect.style.display = 'none';
+            memberWrapper.style.display = 'none';
             memberSelect.required = false;
-            nonMemberName.style.display = 'block';
+            memberSelect.value = '';
+            nonMemberWrapper.style.display = 'block';
             nonMemberName.required = true;
             
             // Only show non-member loan
             loanType.innerHTML = `
                 <option value="" disabled selected>Select loan type...</option>
-                <option value="non-member">Non-Member Loan (10%)</option>
+                <option value="non-member">Non-Member Loan</option>
             `;
         }
         
@@ -761,18 +781,20 @@ const App = {
     },
 
     updateInterestRate() {
-        const loanType = document.getElementById('loanType').value;
-        const interestRateField = document.getElementById('interestRate');
-        
-        const rates = {
-            'normal': 2,
-            'emergency': 5,
-            'non-member': 10
-        };
-        
-        interestRateField.value = rates[loanType] || 2;
-        this.calculateMonthlyInstallment();
-    },
+         const loanType = document.getElementById('loanType').value;
+         const interestRateField = document.getElementById('interestRate');
+         
+         const rates = {
+             'normal': 2,
+             'emergency': 5,
+             'non-member': 10
+         };
+         
+         const rate = rates[loanType] || 2;
+         interestRateField.value = rate;
+         console.log('[Loan Form] Interest rate set to:', rate + '%', 'for loan type:', loanType);
+         this.calculateMonthlyInstallment();
+     },
 
     calculateMonthlyInstallment() {
         const amount = parseFloat(document.getElementById('loanAmount').value) || 0;

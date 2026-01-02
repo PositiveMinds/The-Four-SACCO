@@ -281,7 +281,7 @@ const ReceiptGenerator = {
         doc.setFont('helvetica', 'bold');
         doc.setFontSize(24);
         doc.setTextColor(255, 204, 0);
-        doc.text('THE FOUR', margin, 22);
+        doc.text('TOGETHER AS ONE', margin, 22);
         
         // Tagline
         doc.setFont('helvetica', 'normal');

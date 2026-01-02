@@ -151,7 +151,7 @@ class OfflinePDFGenerator {
             <body>
                 ${htmlContent}
                 <div class="footer">
-                    <p>Generated from SACCO Management System | The Four</p>
+                    <p>Generated from SACCO Management System | Together AS One</p>
                     <p>Date: ${new Date().toLocaleString()}</p>
                 </div>
                 <div class="no-print" style="margin-top: 20px; text-align: center;">
@@ -181,7 +181,7 @@ class OfflinePDFGenerator {
         return `
             <div class="header">
                 <h1>${this.escapeHtml(title)}</h1>
-                <p style="color: #6b7280; margin: 5px 0;">SACCO Management System - The Four</p>
+                <p style="color: #6b7280; margin: 5px 0;">SACCO Management System - Together AS One</p>
             </div>
             <div class="content">
                 ${content}

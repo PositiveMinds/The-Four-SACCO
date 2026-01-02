@@ -60,6 +60,17 @@ class LoanMemberFix {
                 members.map(m => `<option value="${m.id}">${m.name}</option>`).join('');
             loanMemberSelect.value = currentValue;
 
+            // Re-initialize VirtualSelect after updating content
+            if (typeof VirtualSelect !== 'undefined') {
+                VirtualSelect.init({
+                    el: '#loanMember',
+                    searchPlaceholderText: 'Search...',
+                    noOfDisplayRows: 8,
+                    autoSelectFirstOption: false
+                });
+                console.log('[LoanMemberFix] Re-initialized VirtualSelect for loanMember');
+            }
+
             console.log('[LoanMemberFix] Successfully loaded members into dropdown');
             return true;
         } catch (error) {
@@ -83,6 +94,16 @@ class LoanMemberFix {
                     select.innerHTML = '<option value="">Select Member</option>' +
                         members.map(m => `<option value="${m.id}">${m.name}</option>`).join('');
                     select.value = currentValue;
+                    
+                    // Re-initialize VirtualSelect if it's a virtual-select element
+                    if (select.classList.contains('virtual-select') && typeof VirtualSelect !== 'undefined') {
+                        VirtualSelect.init({
+                            el: '#' + selectId,
+                            searchPlaceholderText: 'Search...',
+                            noOfDisplayRows: 8,
+                            autoSelectFirstOption: false
+                        });
+                    }
                     console.log(`[LoanMemberFix] Refreshed ${selectId}`);
                 }
             });

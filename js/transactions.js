@@ -14,9 +14,34 @@ const TransactionManager = {
     currentSavingsPage: 1,
 
     async init() {
-        this.setupEventListeners();
-        this.loadMemberSelect();
-    },
+         this.setupEventListeners();
+         this.loadMemberSelect();
+         
+         // Listen for page changes and hide transaction cards when not on transactions page
+         document.addEventListener('pageChanged', (e) => {
+             const allTransactionsCard = document.getElementById('allTransactionsCard');
+             const loansDetailsCard = document.getElementById('loansDetailsCard');
+             const savingsDetailsCard = document.getElementById('savingsDetailsCard');
+             
+             if (e.detail.page === 'transactions') {
+                 // If a member is selected, show the cards; otherwise hide them
+                 if (this.currentMemberId) {
+                     if (allTransactionsCard) allTransactionsCard.style.display = 'block';
+                     if (loansDetailsCard) loansDetailsCard.style.display = 'block';
+                     if (savingsDetailsCard) savingsDetailsCard.style.display = 'block';
+                 } else {
+                     if (allTransactionsCard) allTransactionsCard.style.display = 'none';
+                     if (loansDetailsCard) loansDetailsCard.style.display = 'none';
+                     if (savingsDetailsCard) savingsDetailsCard.style.display = 'none';
+                 }
+             } else {
+                 // Hide on all other pages
+                 if (allTransactionsCard) allTransactionsCard.style.display = 'none';
+                 if (loansDetailsCard) loansDetailsCard.style.display = 'none';
+                 if (savingsDetailsCard) savingsDetailsCard.style.display = 'none';
+             }
+         });
+     },
 
     resetTransactionsPagination() {
         this.currentPage = 1;
@@ -96,8 +121,17 @@ const TransactionManager = {
     },
 
     async loadMemberTransactions(memberId) {
-        try {
-            const member = await Storage.getMemberById(memberId);
+         try {
+             // Show transaction cards
+             const allTransactionsCard = document.getElementById('allTransactionsCard');
+             const loansDetailsCard = document.getElementById('loansDetailsCard');
+             const savingsDetailsCard = document.getElementById('savingsDetailsCard');
+             
+             if (allTransactionsCard) allTransactionsCard.style.display = 'block';
+             if (loansDetailsCard) loansDetailsCard.style.display = 'block';
+             if (savingsDetailsCard) savingsDetailsCard.style.display = 'block';
+             
+             const member = await Storage.getMemberById(memberId);
             const loans = await Storage.getLoans();
             const savings = await Storage.getSavings();
             const payments = await Storage.getPayments();
@@ -205,31 +239,38 @@ const TransactionManager = {
     },
 
     renderTransactions() {
-        const tbody = document.getElementById('transactionsTableBody');
-        const end = this.currentPage * this.pageSize;
-        const displayTransactions = this.allTransactions.slice(0, end);
+         const tbody = document.getElementById('transactionsTableBody');
+         
+         // Only render if the transactions section is visible
+         const transactionsSection = document.getElementById('transactions');
+         if (!transactionsSection || !transactionsSection.classList.contains('active')) {
+             return;
+         }
+         
+         const end = this.currentPage * this.pageSize;
+         const displayTransactions = this.allTransactions.slice(0, end);
 
-        if (displayTransactions.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted py-4">No transactions found</td></tr>';
-            this.renderTransactionPagination();
-            return;
-        }
+         if (displayTransactions.length === 0) {
+             tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted py-4">No transactions found</td></tr>';
+             this.renderTransactionPagination();
+             return;
+         }
 
-        tbody.innerHTML = displayTransactions.map(txn => `
-            <tr>
-                <td>${txn.date.toLocaleDateString()}</td>
-                <td><span class="badge ${this.getTypeBadgeClass(txn.type)}">${txn.type}</span></td>
-                <td><strong>UGX ${UI.formatNumber(txn.amount)}</strong></td>
-                <td><span class="status-badge status-completed">${txn.status.toUpperCase()}</span></td>
-                <td>
-                    <small>${txn.details}</small>
-                </td>
-            </tr>
-        `).join('');
+         tbody.innerHTML = displayTransactions.map(txn => `
+             <tr>
+                 <td>${txn.date.toLocaleDateString()}</td>
+                 <td><span class="badge ${this.getTypeBadgeClass(txn.type)}">${txn.type}</span></td>
+                 <td><strong>UGX ${UI.formatNumber(txn.amount)}</strong></td>
+                 <td><span class="status-badge status-completed">${txn.status.toUpperCase()}</span></td>
+                 <td>
+                     <small>${txn.details}</small>
+                 </td>
+             </tr>
+         `).join('');
 
-        // Render load more button
-        this.renderTransactionPagination();
-    },
+         // Render load more button
+         this.renderTransactionPagination();
+     },
 
     loadMoreTransactions() {
         const btn = document.getElementById('loadMoreTransactions');
@@ -294,8 +335,14 @@ const TransactionManager = {
     },
 
     displayLoansDetails() {
-        const container = document.getElementById('memberLoansDetailsBody');
-        const paginationContainer = document.getElementById('loanDetailsPagination');
+         // Only render if the transactions section is visible
+         const transactionsSection = document.getElementById('transactions');
+         if (!transactionsSection || !transactionsSection.classList.contains('active')) {
+             return;
+         }
+         
+         const container = document.getElementById('memberLoansDetailsBody');
+         const paginationContainer = document.getElementById('loanDetailsPagination');
         
         const end = this.currentLoansPage * this.pageSize;
         const displayLoans = this.allLoansDetails.slice(0, end);
@@ -425,6 +472,12 @@ const TransactionManager = {
     },
 
     displaySavingsDetails() {
+        // Only render if the transactions section is visible
+        const transactionsSection = document.getElementById('transactions');
+        if (!transactionsSection || !transactionsSection.classList.contains('active')) {
+            return;
+        }
+        
         const container = document.getElementById('memberSavingsDetails');
         const paginationContainer = document.getElementById('savingsDetailsPagination');
         
@@ -552,6 +605,15 @@ const TransactionManager = {
     },
 
     clearTransactionView() {
+        // Hide transaction cards
+        const allTransactionsCard = document.getElementById('allTransactionsCard');
+        const loansDetailsCard = document.getElementById('loansDetailsCard');
+        const savingsDetailsCard = document.getElementById('savingsDetailsCard');
+        
+        if (allTransactionsCard) allTransactionsCard.style.display = 'none';
+        if (loansDetailsCard) loansDetailsCard.style.display = 'none';
+        if (savingsDetailsCard) savingsDetailsCard.style.display = 'none';
+        
         document.getElementById('transactionsTableBody').innerHTML = 
             '<tr><td colspan="5" class="text-center text-muted py-4">Select a member to view transactions</td></tr>';
         document.getElementById('transactionsPagination').innerHTML = '';

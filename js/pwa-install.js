@@ -96,7 +96,7 @@ class PWAInstaller {
                  Swal.fire({
                      icon: 'success',
                      title: 'Installation Successful!',
-                     text: 'The Four SACCO is now installed on your device. You can use it offline anytime.',
+                     text: 'Together AS One SACCO is now installed on your device. You can use it offline anytime.',
                      confirmButtonColor: '#FFCC00'
                  });
              }
@@ -297,7 +297,7 @@ class PWAInstaller {
                      Swal.fire({
                          icon: 'success',
                          title: 'Installation Complete!',
-                         html: '<p>The Four SACCO is now installed on your device.</p><p>You can use all features offline.</p>',
+                         html: '<p>Together AS One SACCO is now installed on your device.</p><p>You can use all features offline.</p>',
                          confirmButtonColor: '#FFCC00',
                          confirmButtonText: 'Start Using'
                      });
@@ -317,7 +317,7 @@ class PWAInstaller {
         let instructions = '';
 
         if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
-            title = 'Install The Four on iOS';
+            title = 'Install Together AS One on iOS';
             instructions = `
                 <div style="text-align: left; margin-top: 1rem;">
                     <p style="font-size: 0.95rem; margin-bottom: 1rem;"><strong>iPhone, iPad & iPod</strong></p>
@@ -334,7 +334,7 @@ class PWAInstaller {
                 </div>
             `;
         } else if (/Android/.test(navigator.userAgent)) {
-            title = 'Install The Four on Android';
+            title = 'Install Together AS One on Android';
             instructions = `
                 <div style="text-align: left; margin-top: 1rem;">
                     <p style="font-size: 0.95rem; margin-bottom: 1rem;"><strong>Android Phones & Tablets</strong></p>
@@ -355,7 +355,7 @@ class PWAInstaller {
                 </div>
             `;
         } else {
-            title = 'Install The Four on Desktop/Laptop';
+            title = 'Install Together AS One on Desktop/Laptop';
             instructions = `
                 <div style="text-align: left; margin-top: 1rem;">
                     <p style="font-size: 0.95rem; margin-bottom: 1rem;"><strong>💻 Windows, Mac & Linux</strong></p>
@@ -371,7 +371,7 @@ class PWAInstaller {
                     <p style="font-size: 0.9rem; font-weight: 600; margin-top: 1rem; margin-bottom: 0.5rem;">🦊 Firefox</p>
                     <ol style="margin-left: 1rem; font-size: 0.9rem;">
                         <li>Click the <strong>menu button</strong> (☰) in the top right</li>
-                        <li>Select <strong>"Install The Four..."</strong></li>
+                        <li>Select <strong>"Install Together AS One..."</strong></li>
                         <li>Click <strong>"Install"</strong> to confirm</li>
                     </ol>
 
