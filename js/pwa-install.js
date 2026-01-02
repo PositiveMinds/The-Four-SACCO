@@ -212,7 +212,7 @@ class PWAInstaller {
     displayButton() {
         this.installBtn = document.getElementById('pwaInstallBtn');
         if (this.installBtn) {
-            this.installBtn.style.display = 'block';
+            this.installBtn.style.display = 'inline-block';
             console.log('✅ Install button displayed');
         }
     }
