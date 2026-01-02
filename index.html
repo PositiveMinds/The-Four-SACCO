@@ -285,41 +285,41 @@
                 <section id="members" class="page">
                     <h2 class="mb-4">Members Management</h2>
 
-                    <div class="row">
-                        <div class="col-lg-4 mb-4">
-                            <div class="card shadow-sm">
-                                <div class="card-header">
-                                    <h5 class="mb-0">Register New Member</h5>
-                                </div>
-                                <div class="card-body">
-                                    <form id="memberForm">
-                                         <div class="mb-3">
-                                             <label for="memberName" class="form-label">Full Name</label>
-                                             <input type="text" class="form-control" id="memberName"
-                                                 placeholder="Full Name" required>
-                                         </div>
-                                         <div class="mb-3">
-                                             <label for="memberEmail" class="form-label">Email</label>
-                                             <input type="email" class="form-control" id="memberEmail"
-                                                 placeholder="Email Address" required>
-                                         </div>
-                                         <div class="mb-3">
-                                             <label for="memberPhone" class="form-label">Phone</label>
-                                             <input type="tel" class="form-control" id="memberPhone"
-                                                 placeholder="Phone Number" required>
-                                         </div>
-                                         <div class="mb-3">
-                                             <label for="memberIdNo" class="form-label">ID Number</label>
-                                             <input type="text" class="form-control" id="memberIdNo"
-                                                 placeholder="Auto-generated" readonly>
-                                         </div>
-                                         <button type="submit" class="btn btn-primary w-100">Register Member</button>
-                                     </form>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="row g-4">
+                         <div class="col-lg-4 mb-4">
+                             <div class="card shadow-sm">
+                                 <div class="card-header">
+                                     <h5 class="mb-0">Register New Member</h5>
+                                 </div>
+                                 <div class="card-body">
+                                     <form id="memberForm">
+                                          <div class="mb-3">
+                                              <label for="memberName" class="form-label">Full Name</label>
+                                              <input type="text" class="form-control" id="memberName"
+                                                  placeholder="Full Name" required>
+                                          </div>
+                                          <div class="mb-3">
+                                              <label for="memberEmail" class="form-label">Email</label>
+                                              <input type="email" class="form-control" id="memberEmail"
+                                                  placeholder="Email Address" required>
+                                          </div>
+                                          <div class="mb-3">
+                                              <label for="memberPhone" class="form-label">Phone</label>
+                                              <input type="tel" class="form-control" id="memberPhone"
+                                                  placeholder="Phone Number" required>
+                                          </div>
+                                          <div class="mb-3">
+                                              <label for="memberIdNo" class="form-label">ID Number</label>
+                                              <input type="text" class="form-control" id="memberIdNo"
+                                                  placeholder="Auto-generated" readonly>
+                                          </div>
+                                          <button type="submit" class="btn btn-primary w-100">Register Member</button>
+                                      </form>
+                                 </div>
+                             </div>
+                         </div>
 
-                        <div class="col-lg-8">
+                         <div class="col-lg-8" style="display: flex; flex-direction: column;">
                             <div class="d-flex justify-content-between align-items-center mb-3 gap-2 flex-wrap">
                                 <h5 class="mb-0">Registered Members</h5>
                                 <div class="input-group" style="max-width: 250px;">
@@ -340,13 +340,13 @@
                                     </button>
                                 </div>
                             </div>
-                            <div id="membersList" class="row g-3">
-                                <div class="col-12">
-                                    <p class="text-muted text-center">No members registered yet</p>
-                                </div>
+                            <div id="membersList" class="row g-3" style="flex-grow: 1; overflow-y: auto;">
+                                 <div class="col-12">
+                                     <p class="text-muted text-center">No members registered yet</p>
+                                 </div>
+                             </div>
+                             <div id="membersPagination"></div>
                             </div>
-                            <div id="membersPagination"></div>
-                        </div>
                     </div>
                 </section>
 
