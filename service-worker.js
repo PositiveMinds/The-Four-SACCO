@@ -1,5 +1,5 @@
-const CACHE_NAME = 'sacco-v4';
-const RUNTIME_CACHE = 'sacco-runtime-v4';
+const CACHE_NAME = 'sacco-v5';
+const RUNTIME_CACHE = 'sacco-runtime-v5';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
